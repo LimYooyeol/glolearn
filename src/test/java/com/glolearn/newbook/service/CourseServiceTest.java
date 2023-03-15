@@ -104,7 +104,6 @@ class CourseServiceTest {
         courseUpdateDto.setTitle("코스2");
         courseUpdateDto.setIntroduction("코스2에 대한 설명");
         courseUpdateDto.setCategory(courseRegisterDto.getCategory());
-        courseUpdateDto.setIsPublished(courseRegisterDto.getIsPublished());
         courseUpdateDto.setCover(courseUpdateDto.getCover());
 
         //when
@@ -195,6 +194,20 @@ class CourseServiceTest {
 
         // 주의: size 달라지면 달라짐
         assertEquals(2 , aiCourses.size());
+    }
+
+    @Test
+    public void 수강중인코스목록_조회_테스트(){
+        //given
+        CourseSearchDto courseSearchDto = new CourseSearchDto();
+        courseSearchDto.setPageNum(1);
+        courseSearchDto.setPageSize(6);
+
+        //when
+        List<CoursePreviewDto> courses = courseService.findCoursesByMember(-1L, courseSearchDto);
+
+        //then
+        assertEquals(0, courses.size());
     }
 
 

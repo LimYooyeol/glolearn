@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html
         xmlns:th = "http://www.thymeleaf.org">
-<ul th:fragment="category">
-    <li>
-        <a onclick="changeCategory('all')">ALL</a>
+<ul class="list-group" th:fragment="category">
+    <li class="list-group-item">
+        <a style="color:black; cursor: pointer;"
+           th:onclick="|changeCategory('all')|">
+            ALL
+        </a>
     </li>
-    <li th:each = "cat : ${T(com.glolearn.newbook.domain.Category).values()}"
+    <li class="list-group-item" th:each = "cat : ${T(com.glolearn.newbook.domain.Category).values()}"
         th:value="${cat}">
-<!--        <a th:href="@{/courses/{category}(category = ${cat.toString().toLowerCase()})}"-->
-        <a th:attr="onclick=|changeCategory('${cat.toString().toLowerCase()}')|"
-           th:text="${cat.getValue()}"></a>
+        <a style="color:black; cursor: pointer"
+           th:text = "${cat.getValue()}"
+           th:attr="onclick=|changeCategory('${cat.toString().toLowerCase()}')|">
+        </a>
     </li>
 </ul>
 </html>

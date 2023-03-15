@@ -24,10 +24,9 @@ public class HomeController {
     @GetMapping("/")
     @Auth
     public String home(Model model){
-        if(UserContext.getCurrentMember() != null){
-            Member member = memberService.findMember(UserContext.getCurrentMember());
-            if(member != null) {model.addAttribute("nickname", member.getNickname());}
-        }
+        Member member = memberService.findMember(UserContext.getCurrentMember());
+        if(member != null) {model.addAttribute("nickname", member.getNickname());}
+
 
         List<CoursePreviewDto> popularCourses = courseService.findPopularCourseList();
         model.addAttribute("popularCourses", popularCourses);

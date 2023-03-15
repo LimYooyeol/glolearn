@@ -12,9 +12,22 @@
     </div>
     <div class="row">
         <div class="col">
-            <button style="float:right;" th:onclick="|deleteCourse('${course.id}')|">
-                삭제
-            </button>
+            <th:block th:if="${!course.isPublished}">
+                <button class="btn btn-secondary" style="float:right;"
+                        th:onclick="|deleteCourse('${course.id}')|">
+                    삭제
+                </button>
+                <form id="publishCourseForm" action="/course/publish" method="post">
+                    <input type="hidden" name="courseId" th:value="${course.id}">
+                </form>
+                <button class="btn btn-primary" style="float:right;"
+                        th:onclick="publishCourse()">
+                    출판하기
+                </button>
+            </th:block>
+            <th:block th:if="${course.isPublished}">
+                <button style="float:right;" class = "btn btn-primary">통계보기</button>
+            </th:block>
         </div>
     </div>
     <div class="row">
@@ -33,42 +46,47 @@
         <div id="display0" class="col">
             <div class="row">
                 <div class="col">
-                    <button style="float:right;">
-                        <a th:href="@{/lecturer/course/{id}/modify(id=${course.id})}">수정</a>
+                    <button style="float:right;" class="btn btn-secondary">
+                        <a th:href="@{/course/{id}/modify(id=${course.id})}" style="color:white;">수정</a>
                     </button>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <h3>제목</h3>
+                    <h3 style="font-weight:bold;">제목</h3>
                     <h3 th:text="${course.title}">{title}</h3><br>
-                    <h3>커버</h3>
+                    <h3 style="font-weight:bold;">커버</h3>
                     <div style="width: 12em; height: 9em; border: 1px solid; display: flex;
                             align-items: center;">
-                        <div style="width:100%; text-align: center;">
-                            <img style="width:100%;" th:src="${course.cover}">
+                        <div style="width:200px;height:150px; text-align: center; justify-content:center;">
+                            <img style="max-width:100%; max-height:100%;" th:src="${course.cover}">
                         </div>
                     </div><br>
-                    <h3>소개</h3>
+                    <h3 style="font-weight:bold;">소개</h3>
                     <div id="viewer"></div>
                 </div>
             </div>
         </div>
         <div id="display1" class="col" style="display:none;">
-            <ul>
-               <li th:each="lecture:${lectures}">
-                   <a th:text="${lecture.title}"
-                        th:href="@{/lecturer/course/{courseId}/{lectureId}(courseId=${course.id}, lectureId=${lecture.lectureId})}"></a>
-                   <a th:text="수정"
-                      th:href="@{/lecturer/course/{courseId}/{lectureId}/modify(courseId=${course.id}, lectureId=${lecture.lectureId})}"></a>
-                   <button th:text="삭제"
-                        th:onclick ="|deleteLecture(
-                        '/course/${course.id}/${lecture.lectureId}'
+            <ul class="list-group">
+               <li class="list-group-item" th:each="lecture:${lectures}">
+                   <a style="color:black;" th:text="${lecture.title}"
+                        th:href="@{/lecture/{lectureId}/manage(lectureId=${lecture.lectureId})}"></a>
+                   <button style="float:right; background-color:white; border:none; color:blue;" th:text="삭제"
+                           th:onclick ="|deleteLecture(
+                        '/lecture/${lecture.lectureId}'
                         )|"
-                      th:href="@{/lecturer/course/{courseId}/{lectureId}/modify(courseId=${course.id}, lectureId=${lecture.lectureId})}"></button>
-               </li>
+                           th:href="@{/lecturer/course/{courseId}/{lectureId}/modify(courseId=${course.id}, lectureId=${lecture.lectureId})}"></button>
+
+                   <a style="float:right;" th:text="수정"
+                      th:href="@{/lecture/{lectureId}/modify(lectureId=${lecture.lectureId})}"></a>
+                   </li>
             </ul>
-            <button><a th:href="@{/lecturer/course/{courseId}/lecture/register(courseId=${course.id})}">강의 추가</a></button>
+            <div style="width:100%;text-align:center;">
+                <button class="btn btn-primary">
+                    <a style="color:white;" th:href="@{/course/{courseId}/lecture/register(courseId=${course.id})}">강의 추가</a>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -119,7 +137,6 @@
     }
 
     function deleteLecture(action){
-        alert(action)
         var input = confirm('정말 삭제하시겠습니까?')
         if(input){
 
@@ -129,5 +146,15 @@
             form.submit()
         }
     }
+
+    function publishCourse(){
+        var input = confirm('출판 후에는 코스를 삭제할 수 없습니다. 출판하시겠습니까?')
+        if(input){
+
+            var form = document.getElementById('publishCourseForm')
+            form.submit()
+        }
+    }
+
 </script>
 </html>

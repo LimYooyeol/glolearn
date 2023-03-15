@@ -7,7 +7,7 @@
 <body>
 <div class="container">
     <div th:replace="/fragments/nav_lecturer.html::nav"></div>
-    <form th:action="@{/course/{courseId}/{lectureId}(courseId=${courseId}, lectureId = ${lectureId})}"
+    <form th:action="@{/lecture/{lectureId}(lectureId = ${lectureId})}"
           th:method="put" th:object="${lectureUpdateDto}">
         <div class="row">
             <div class="col">
@@ -24,12 +24,6 @@
                 <div id = "editor"></div>
             </div>
         </div>
-        <!--    <div class="row">-->
-        <!--      <div class="col">-->
-        <!--        <h3>공개하기</h3>-->
-        <!--        <input type="checkbox" th:field = "*{isPublished}">-->
-        <!--      </div>-->
-        <!--    </div>-->
         <div class="row">
             <div class="col">
                 <button class="btn btn-primary" type="submit" onclick="update()" style="float:right;">수정하기</button>

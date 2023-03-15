@@ -18,7 +18,7 @@ public class CourseRegisterDto {
     private String introduction;
 
     @NotNull
-    private Boolean isPublished;
+    private Boolean isPublished = false;
 
     @NotNull
     private Category category;

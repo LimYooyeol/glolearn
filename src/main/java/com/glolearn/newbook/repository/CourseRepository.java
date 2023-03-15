@@ -1,9 +1,6 @@
 package com.glolearn.newbook.repository;
 
-import com.glolearn.newbook.domain.Category;
-import com.glolearn.newbook.domain.Course;
-import com.glolearn.newbook.domain.QCourse;
-import com.glolearn.newbook.domain.QMember;
+import com.glolearn.newbook.domain.*;
 import com.glolearn.newbook.dto.course.CourseSearchDto;
 import com.glolearn.newbook.dto.course.Sort;
 import com.querydsl.core.types.Order;
@@ -18,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.glolearn.newbook.domain.QCourse.course;
 import static com.glolearn.newbook.domain.QMember.member;
@@ -90,7 +88,6 @@ public class CourseRepository {
                 .fetch();
     }
 
-
     public Long countCourses(CourseSearchDto courseSearchDto){
         JPAQuery<Course> query = new JPAQuery<>(em);
 
@@ -112,11 +109,54 @@ public class CourseRepository {
         QCourse course = QCourse.course;
         QMember member = QMember.member;
 
-        return  query.select(course.count()).from(course).join(course.lecturer, member)
+        return  query.select(course.count()).from(course)
+                .join(course.lecturer, member)
                 .where(
                         eqCategory(courseSearchDto.getCategory()),
                         titleLike(courseSearchDto.getSearch()),
                         lecturedBy(lecturerId)
+                )
+                .orderBy(getSort(courseSearchDto.getSort()))
+                .fetchOne();
+    }
+
+    // 수강 중인 코스 조회
+    public List<Course> findCoursesByMemberId(Long memberId, CourseSearchDto courseSearchDto){
+        JPAQuery<Enrollment> query = new JPAQuery<>(em);
+
+        QEnrollment enrollment = QEnrollment.enrollment;
+        QCourse course = QCourse.course;
+        QMember member = QMember.member;
+
+        List<Enrollment> enrollments = query.from(enrollment)
+                .join(enrollment.member, member).fetchJoin()
+                .join(enrollment.course, course).fetchJoin()
+                .where(
+                        eqCategory(courseSearchDto.getCategory()),
+                        titleLike(courseSearchDto.getSearch())
+                )
+                .orderBy(getSort(courseSearchDto.getSort()))
+                .offset((courseSearchDto.getPageNum() - 1) * courseSearchDto.getPageSize())
+                .limit(courseSearchDto.getPageSize())
+                .fetch();
+
+        return enrollments.stream().map(e -> e.getCourse()).collect(Collectors.toList());
+    }
+
+    // 수강 중인 코스 조회 시 코스 수
+    public Long countCoursesByMemberId(Long memberId, CourseSearchDto courseSearchDto){
+        JPAQuery<Enrollment> query = new JPAQuery<>(em);
+
+        QEnrollment enrollment = QEnrollment.enrollment;
+        QCourse course = QCourse.course;
+        QMember member = QMember.member;
+
+        return query.select(course.count()).from(enrollment)
+                .join(enrollment.member, member)
+                .join(enrollment.course, course)
+                .where(
+                        eqCategory(courseSearchDto.getCategory()),
+                        titleLike(courseSearchDto.getSearch())
                 )
                 .orderBy(getSort(courseSearchDto.getSort()))
                 .fetchOne();

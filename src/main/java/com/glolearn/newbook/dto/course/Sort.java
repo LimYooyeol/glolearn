@@ -20,6 +20,6 @@ public enum Sort {
             }
         }
 
-        return null;
+        return RECENT;
     }
 }

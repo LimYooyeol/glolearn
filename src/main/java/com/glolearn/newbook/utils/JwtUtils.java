@@ -1,10 +1,7 @@
 package com.glolearn.newbook.utils;
 
 import com.glolearn.newbook.exception.InvalidJwtException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -99,6 +96,8 @@ public class JwtUtils {
                 return false;
             }
         }catch (SignatureException e){
+            return false;
+        }catch (ExpiredJwtException e){
             return false;
         }
 

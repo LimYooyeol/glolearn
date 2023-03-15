@@ -68,4 +68,7 @@ public class LectureService {
         lecture.update(lectureUpdateDto);
     }
 
+    public Lecture findFirstLecture(Long courseId) {
+        return lectureRepository.findFirstLecture(courseId);
+    }
 }

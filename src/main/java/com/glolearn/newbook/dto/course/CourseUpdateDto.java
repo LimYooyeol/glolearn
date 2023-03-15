@@ -21,9 +21,6 @@ public class CourseUpdateDto {
     private String introduction;
 
     @NotNull
-    private Boolean isPublished;
-
-    @NotNull
     private Category category;
 
     @NotBlank
@@ -35,7 +32,6 @@ public class CourseUpdateDto {
         this.id = course.getId();
         this.title = course.getTitle();
         this.introduction = course.getIntroduction().getIntroduction();
-        this.isPublished = course.getIsPublished();
         this.category = course.getCategory();
         this.cover = course.getCover();
     }

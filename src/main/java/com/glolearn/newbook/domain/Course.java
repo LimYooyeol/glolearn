@@ -63,9 +63,16 @@ public class Course {
     public void update(CourseUpdateDto courseUpdateDto){
         this.title = courseUpdateDto.getTitle();
         this.introduction.updateIntroduction(courseUpdateDto.getIntroduction());
-        this.isPublished = courseUpdateDto.getIsPublished();
         this.category = courseUpdateDto.getCategory();
         this.cover = courseUpdateDto.getCover();
+    }
+
+    public void publish(){
+        this.isPublished = true;
+    }
+
+    public void addStudent(){
+        this.numStudent ++;
     }
 
 }

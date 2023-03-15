@@ -30,6 +30,17 @@ public class LectureRepository {
                 .getResultList();
     }
 
+    public Lecture findFirstLecture(Long courseId){
+        List<Lecture> list =  em.createQuery(
+                "select l from Lecture l " +
+                        " where l.course.id =: courseId " +
+                        " order by l.id ")
+                .setParameter("courseId", courseId)
+                .setMaxResults(1).getResultList();
+
+        return (list.size() > 0) ? list.get(0) : null;
+    }
+
     public void delete(Lecture lecture){
         em.remove(lecture);
     }

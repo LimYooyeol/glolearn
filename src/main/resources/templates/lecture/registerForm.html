@@ -11,7 +11,7 @@
     <div class="row">
       <div class="col">
         <h3>제목</h3>
-        <input th:field="*{title}" type="text" placeholder="제목을 입력하세요.">
+        <input class="form-control" th:field="*{title}" type="text" placeholder="제목을 입력하세요.">
         <p th:if="${#fields.hasErrors('title')}" style="color:red;">제목은 2자에서 30자 이내로 입력해주세요.</p>
       </div>
     </div>

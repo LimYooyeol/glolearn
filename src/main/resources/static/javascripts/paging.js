@@ -1,10 +1,10 @@
 $('#sortSelect').change(function(){
-    base = document.getElementById('pagingBase').value
-    var category = base + '/courses'
+    var base = document.getElementById('pagingBase').value
+    var category = ''
     if(document.getElementById('pageCategory') == null){
-        category = category + '/' + 'all'
+        category = base + '/' + 'all'
     }else{
-        category = category + '/' + document.getElementById('pageCategory').value.toLowerCase()
+        category = base + '/' + document.getElementById('pageCategory').value.toLowerCase()
     }
 
     if(document.getElementById('pageSearch') == null){
@@ -15,9 +15,8 @@ $('#sortSelect').change(function(){
 })
 
 function changeCategory(category){
-    base = document.getElementById('pagingBase').value
-
-    window.location.href = base + '/courses/' + category
+    var href = document.getElementById('pagingBase').value + '/' + category
+    window.location.href = href
 }
 
 function search(){
@@ -25,11 +24,11 @@ function search(){
 
     base = document.getElementById('pagingBase').value
 
-    var category = base + '/courses'
+    var category = ''
     if(document.getElementById('pageCategory') == null){
-        category = category + '/' + 'all'
+        category = base + '/' + 'all'
     }else{
-        category = category + '/' + document.getElementById('pageCategory').value
+        category = base + '/' + document.getElementById('pageCategory').value
     }
 
     var sort = document.getElementById('pageSort').value.toLowerCase()
@@ -43,11 +42,11 @@ function search(){
 function movePage(pageNum){
     base = document.getElementById('pagingBase').value
 
-    var category = base + '/courses'
+    var category = ''
     if(document.getElementById('pageCategory')== null){
-        category = category + '/' + 'all'
+        category = base + '/all'
     }else{
-        category = category + '/' + document.getElementById('pageCategory').value
+        category = base + '/' + document.getElementById('pageCategory').value
     }
 
     var sort = document.getElementById('pageSort').value

@@ -58,7 +58,6 @@ public class AuthController {
         }
     }
 
-
     /*
         #shorts :
             OAuth 인증 시 access code 를 들고 redirect 되는 포인트.
@@ -87,7 +86,6 @@ public class AuthController {
         String oAuthId;
 
         // 1. OAuthId 얻기
-        JSONObject httpBody = new JSONObject();
         oAuthAccessToken = oauthProvider.getAccessToken(accessCode);
         oAuthId = oauthProvider.getOAuthId(oAuthAccessToken);
 
@@ -101,6 +99,7 @@ public class AuthController {
             memberService.addMember(member);
         }
 
+
         // 4. JWT 생성 (글로런 서비스 이용을 위한 인증 토큰)
         String userAccessToken = jwtUtils.createAccessToken(member.getId());
         String userRefreshToken = jwtUtils.createRefreshToken();
@@ -110,5 +109,4 @@ public class AuthController {
         jwtUtils.issueAccessTokenAndRefreshToken(response, userAccessToken, userRefreshToken);
         return "redirect:" + redirectPath;
     }
-
 }

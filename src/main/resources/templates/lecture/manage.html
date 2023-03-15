@@ -4,20 +4,20 @@
 <head th:replace = "fragments/header :: header">
 <body>
 <div class="container">
-    <div th:replace = "fragments/nav::nav"></div>
-    <div class="row">
-        <h3 th:text="${lecture.courseTitle}">{course-title}</h3>
-    </div>
-    <div class="row">
-        <h4 th:text="${lecture.lectureTitle}">{lecture-title}</h4>
-    </div>
-    <hr>
-    <div class="row">
-        <div id="viewer"></div>
-    </div>
-    <div class="row" style="justify-content:center">
-        [&lt;] [목록] [&gt;]
-    </div>
+  <div th:replace = "fragments/nav_lecturer::nav"></div>
+  <div class="row">
+    <h3 th:text="${lecture.courseTitle}">{course-title}</h3>
+  </div>
+  <div class="row">
+    <h4 th:text="${lecture.lectureTitle}">{lecture-title}</h4>
+  </div>
+  <hr>
+  <div class="row">
+    <div id="viewer"></div>
+  </div>
+  <div class="row" style="justify-content:center">
+      [목록]
+  </div>
 </div>
 <input type="hidden" id="contents" th:value="${lecture.contents}">
 </body>

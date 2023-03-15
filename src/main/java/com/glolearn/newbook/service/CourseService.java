@@ -6,6 +6,7 @@ import com.glolearn.newbook.dto.course.CoursePreviewDto;
 import com.glolearn.newbook.dto.course.CourseRegisterDto;
 import com.glolearn.newbook.dto.course.CourseSearchDto;
 import com.glolearn.newbook.dto.course.CourseUpdateDto;
+import com.glolearn.newbook.exception.InvalidAccessException;
 import com.glolearn.newbook.repository.CourseRepository;
 import com.glolearn.newbook.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,9 @@ public class CourseService {
     public void removeById(Long courseId){
         Course course = courseRepository.findById(courseId).orElse(null);
         if(course == null) {throw new IllegalArgumentException("존재하지 않는 코스입니다.");}
+        if(course.getIsPublished() == true){
+            throw new InvalidAccessException("출시한 코스는 제거할 수 없습니다.");
+        }
 
         courseRepository.delete(course);
     }
@@ -92,6 +96,7 @@ public class CourseService {
         return (numCourses - 1)/courseSearchDto.getPageSize() + 1;
     }
 
+    // 강의 중인 코스 목록 조회
     public List<CoursePreviewDto> findCoursesByLecturer(Long lecturerId, CourseSearchDto courseSearchDto){
         List<Course> lecturerCourses = courseRepository.findCoursesByLecturer(lecturerId, courseSearchDto);
         List<CoursePreviewDto> result = lecturerCourses.stream()
@@ -99,6 +104,32 @@ public class CourseService {
                 .collect(Collectors.toList());
 
         return result;
+    }
+
+    // 수강 중인 코스 목록 조회
+    public List<CoursePreviewDto> findCoursesByMember(Long memberId, CourseSearchDto courseSearchDto){
+        List<Course> courses = courseRepository.findCoursesByMemberId(memberId, courseSearchDto);
+        List<CoursePreviewDto> result = courses.stream()
+                .map(c -> new CoursePreviewDto(c))
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+    // 수강 중인 코스 목록 조회 시 페이지 수 게싼
+    public int findMaxPageByMember(Long memberId, CourseSearchDto courseSearchDto) {
+        int numCourses = Math.toIntExact(courseRepository.countCoursesByMemberId(memberId, courseSearchDto));
+
+        return (numCourses - 1)/courseSearchDto.getPageSize() + 1;
+    }
+
+    // 코스 출시
+    @Transactional
+    public void publishCourse(Long courseId){
+        Course course = courseRepository.findById(courseId).orElse(null);
+        if(course == null) {throw new IllegalArgumentException("존재하지 않는 코스입니다.");}
+
+        course.publish();
     }
 
 }

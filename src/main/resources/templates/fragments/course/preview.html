@@ -23,12 +23,11 @@
                  style="height:50%;">
             <div class="card-body">
                 <h5 class="card-title">
-                    <a th:text="${course.title}" th:href="'/course/'+${course.courseId}" style="color:black"></a>
+                    <a th:text="${course.title}" th:href="'/course/'+${course.courseId} + '/manage'" style="color:black"></a>
                 </h5>
                 <p class="card-text" style="font-weight:bold;" th:text="${course.lecturer}"></p>
                 <p class="card-text" th:text="${course.numStudent} + '명이 수강 중'"></p>
             </div>
-            <a th:href="@{/lecturer/course/{courseId}(courseId = ${course.courseId})}">관리하기</a>
         </div>
     </th:block>
 </div>

@@ -21,6 +21,8 @@ public class CourseDetailsDto {
 
     String introduction;
 
+    Boolean isPublished;
+
     public CourseDetailsDto(Course course){
         this.id = course.getId();
         this.cover = course.getCover();
@@ -29,7 +31,7 @@ public class CourseDetailsDto {
         this.numStudent = course.getNumStudent();
         this.regDate = course.getRegDate().toLocalDate().toString();
         this.introduction = course.getIntroduction().getIntroduction();
+        this.isPublished = course.getIsPublished();
     }
 
-//    List<LecturePreviewDto> lectures;
 }
