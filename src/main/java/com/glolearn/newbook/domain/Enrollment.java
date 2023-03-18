@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,12 +22,18 @@ public class Enrollment {
     @JoinColumn(name = "course_id")
     private Course course;
 
+    private LocalDateTime enrollDate;
+
+    private String orderId;
+
     protected Enrollment(){}
-    public static Enrollment createEnrollment(Member member, Course course) {
+    public static Enrollment createEnrollment(Member member, Course course, String orderId) {
         Enrollment enrollment = new Enrollment();
         enrollment.member = member;
         enrollment.course = course;
         enrollment.course.addStudent();
+        enrollment.enrollDate = LocalDateTime.now();
+        enrollment.orderId = orderId;
 
         return enrollment;
     }

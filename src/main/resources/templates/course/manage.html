@@ -19,6 +19,7 @@
                 </button>
                 <form id="publishCourseForm" action="/course/publish" method="post">
                     <input type="hidden" name="courseId" th:value="${course.id}">
+                    <input type="hidden" name="price" id = "coursePrice">
                 </form>
                 <button class="btn btn-primary" style="float:right;"
                         th:onclick="publishCourse()">
@@ -138,18 +139,17 @@
 
     function deleteLecture(action){
         var input = confirm('정말 삭제하시겠습니까?')
-        if(input){
 
-            var form = document.getElementById('deleteLectureForm')
-
-            form.action = action
-            form.submit()
-        }
     }
 
     function publishCourse(){
         var input = confirm('출판 후에는 코스를 삭제할 수 없습니다. 출판하시겠습니까?')
+
+
         if(input){
+            var price = prompt('적절한 가격을 설정해주세요.')
+            document.getElementById('coursePrice').value = price
+            alert(document.getElementById('coursePrice').value)
 
             var form = document.getElementById('publishCourseForm')
             form.submit()

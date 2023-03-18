@@ -305,7 +305,7 @@ public class CourseController {
     // 코스 출시
     @PostMapping("/course/publish")
     @Auth
-    public String publishCourse(Long courseId){
+    public String publishCourse(Long courseId, Long price){
         // 인증
         Member member = memberService.findMember(UserContext.getCurrentMember());
         if(member == null) {return "redirect:/login";}
@@ -316,12 +316,17 @@ public class CourseController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
+        //유효성 검사
+        if(price < 0){
+            throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
+        }
+
         // 인가
         if(course.getLecturer().getId() != member.getId()){
             throw new InvalidAccessException("수정 권한이 없습니다.");
         }
 
-        courseService.publishCourse(courseId);
+        courseService.publishCourse(courseId, price);
         return "redirect:/course/" + courseId + "/manage";
     }
 

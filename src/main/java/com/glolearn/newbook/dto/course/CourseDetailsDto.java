@@ -23,6 +23,8 @@ public class CourseDetailsDto {
 
     Boolean isPublished;
 
+    Long price;
+
     public CourseDetailsDto(Course course){
         this.id = course.getId();
         this.cover = course.getCover();
@@ -32,6 +34,7 @@ public class CourseDetailsDto {
         this.regDate = course.getRegDate().toLocalDate().toString();
         this.introduction = course.getIntroduction().getIntroduction();
         this.isPublished = course.getIsPublished();
+        this.price = course.getPrice();
     }
 
 }

@@ -23,11 +23,14 @@
                 <p th:text="${courseDetailsDto.regDate} + ' 등록 됨'"></p>
             </div>
             <div class="row">
+                <p th:text="'가격: ' + ${courseDetailsDto.price} + '(원)'"></p>
+            </div>
+            <div class="row">
                 <button th:if="${enrolled == true}" class="btn btn-success">이어보기</button>
-                <form th:if="${enrolled == false}" id="enrollmentForm" action="/enrollment" method="post">
-                    <input type="hidden" name="courseId" th:value="${courseDetailsDto.id}">
-                    <button class="btn btn-success"
-                            th:onclick="|enroll('${courseDetailsDto.id}')|">수강하기</button>
+                <button th:if="${enrolled == false}"
+                        class="btn btn-success" th:onclick="|enroll('${courseDetailsDto.id}')|">수강하기</button>
+                <form id="freeEnrollmentForm"
+                        th:action="@{/enrollment/{courseId}/free(courseId=${courseDetailsDto.id})}" method="post">
                 </form>
             </div>
         </div>
@@ -85,6 +88,11 @@
         </div>
     </div>
 </div>
+
+<!--결제 용 데이터-->
+<input type="hidden" id="payCourseId" th:value="${courseDetailsDto.id}">
+<input type="hidden" id="payPrice" th:value = "${courseDetailsDto.price}">
+<input type="hidden" id="payProductName" th:value = "${courseDetailsDto.title}">
 </body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="/javascripts/bootstrap.js"></script>
@@ -113,6 +121,32 @@
 
         hide.style.display = 'none'
         display.style.display = 'unset'
+    }
+</script>
+<script src="https://js.tosspayments.com/v1/payment"></script>
+<script>
+    const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq'
+    const tossPayments = TossPayments(clientKey)
+
+    const amount = parseInt(document.getElementById('payPrice').value)
+    const orderName = document.getElementById('payProductName').value
+    const courseId = document.getElementById('payCourseId').value
+    const orderId = crypto.randomUUID()
+
+
+    function enroll(courseId){
+        if(amount == 0){
+            document.getElementById('freeEnrollmentForm').submit()
+            return;
+        }
+
+        tossPayments.requestPayment('카드', { // 결제 수단 파라미터
+          amount: amount,       // 결제 가격(변조 주의)
+          orderId: orderId,     // 주문 ID (UUID)
+          orderName: orderName, // 상품명
+          successUrl: 'http://localhost:8080/enrollment/' + courseId,
+          failUrl: 'http://localhost:8080/payment/failure',
+        })
     }
 </script>
 </html>

@@ -19,7 +19,7 @@ public class EnrollmentService {
     private final CourseRepository courseRepository;
 
     @Transactional
-    public Long addEnrollment(Long memberId, Long courseId){
+    public Long addEnrollment(Long memberId, Long courseId, String orderId){
         Member member = memberRepository.findById(memberId);
         Course course = courseRepository.findById(courseId).orElse(null);
 
@@ -27,7 +27,7 @@ public class EnrollmentService {
             throw new IllegalArgumentException("존재하지 않는 회원이나 코스입니다.");
         }
 
-        Enrollment enrollment = Enrollment.createEnrollment(member, course);
+        Enrollment enrollment = Enrollment.createEnrollment(member, course, orderId);
         return enrollmentRepository.save(enrollment);
     }
 

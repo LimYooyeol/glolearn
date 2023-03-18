@@ -125,11 +125,12 @@ public class CourseService {
 
     // 코스 출시
     @Transactional
-    public void publishCourse(Long courseId){
+    public void publishCourse(Long courseId, Long price){
+        if(price == null) {throw new IllegalArgumentException("가격을 설정해야 합니다.");}
         Course course = courseRepository.findById(courseId).orElse(null);
         if(course == null) {throw new IllegalArgumentException("존재하지 않는 코스입니다.");}
 
-        course.publish();
+        course.publish(price);
     }
 
 }

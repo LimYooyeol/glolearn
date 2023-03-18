@@ -45,7 +45,7 @@ public class ImageController {
     @PostMapping("/image")
     @ResponseBody
     @Auth
-    public String temp(MultipartFile image) throws IOException {
+    public String uploadImage(MultipartFile image) throws IOException {
         if(UserContext.getCurrentMember() == null){
             throw new InvalidAccessException("Not authenticated");
         }

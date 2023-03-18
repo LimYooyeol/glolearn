@@ -4,14 +4,11 @@ import com.glolearn.newbook.dto.course.CourseRegisterDto;
 import com.glolearn.newbook.dto.course.CourseUpdateDto;
 import lombok.Getter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -45,6 +42,8 @@ public class Course {
 
     private Long numStudent;
 
+    private Long price;
+
     protected Course(){}
 
     public static Course createCourse(Member lecturer, CourseRegisterDto courseRegisterDto){
@@ -67,8 +66,9 @@ public class Course {
         this.cover = courseUpdateDto.getCover();
     }
 
-    public void publish(){
+    public void publish(Long price){
         this.isPublished = true;
+        this.price = price;
     }
 
     public void addStudent(){
