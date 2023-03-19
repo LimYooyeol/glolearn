@@ -3,6 +3,7 @@ package com.glolearn.newbook.repository;
 import com.glolearn.newbook.domain.Member;
 import com.glolearn.newbook.domain.Auth.OauthDomain;
 import com.glolearn.newbook.domain.QMember;
+import com.glolearn.newbook.exception.InvalidAccessException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -40,5 +41,12 @@ public class MemberRepository {
                 .getResultList().stream().findFirst().orElse(null);
 
         return findMember;
+    }
+
+    // 회원 탈퇴
+    public void deleteById(Long id){
+        Member member = em.find(Member.class, id);
+        if(member == null) {throw new IllegalArgumentException("존재하지 않는 회원입니다.");}
+        em.remove(member);
     }
 }

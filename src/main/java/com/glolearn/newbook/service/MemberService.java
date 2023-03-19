@@ -41,4 +41,9 @@ public class MemberService {
 
         member.updateNickname(newNickname);
     }
+
+    @Transactional
+    public void removeById(Long id){
+        memberRepository.deleteById(id);
+    }
 }
