@@ -3,7 +3,6 @@ package com.glolearn.newbook.controller;
 import com.glolearn.newbook.annotation.Auth;
 import com.glolearn.newbook.aspect.auth.UserContext;
 import com.glolearn.newbook.domain.Course;
-import com.glolearn.newbook.domain.Enrollment;
 import com.glolearn.newbook.domain.Member;
 import com.glolearn.newbook.exception.InvalidAccessException;
 import com.glolearn.newbook.payment.TossPayments;

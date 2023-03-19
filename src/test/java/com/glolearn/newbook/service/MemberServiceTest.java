@@ -1,5 +1,6 @@
 package com.glolearn.newbook.service;
 
+import com.glolearn.newbook.annotation.Auth;
 import com.glolearn.newbook.domain.Auth.OauthDomain;
 import com.glolearn.newbook.domain.Member;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.RollbackException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -19,6 +22,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceTest {
 
     @Autowired MemberService memberService;
+    @Autowired
+    EntityManager em;
+
+    @Test
+    public void 회원_닉네임변경_테스트(){
+        //given
+        Member member1 = Member.createMember("test1", OauthDomain.KAKAO, "test1");
+        memberService.addMember(member1);
+        Member member2 = Member.createMember("test2", OauthDomain.KAKAO, "test2");
+        memberService.addMember(member2);
+
+        em.flush();
+        em.clear();
+
+        //when
+        memberService.modifyNickname(member2.getId(), "test1");
+
+        //then
+        assertThrows(PersistenceException.class, () -> em.flush());
+    }
 
     @Test
     public void 회원추가_및_조회_테스트(){
