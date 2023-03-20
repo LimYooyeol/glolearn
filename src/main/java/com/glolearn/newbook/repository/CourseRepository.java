@@ -133,7 +133,8 @@ public class CourseRepository {
                 .join(enrollment.course, course).fetchJoin()
                 .where(
                         eqCategory(courseSearchDto.getCategory()),
-                        titleLike(courseSearchDto.getSearch())
+                        titleLike(courseSearchDto.getSearch()),
+                        enrolledBy(memberId)
                 )
                 .orderBy(getSort(courseSearchDto.getSort()))
                 .offset((courseSearchDto.getPageNum() - 1) * courseSearchDto.getPageSize())
@@ -156,10 +157,15 @@ public class CourseRepository {
                 .join(enrollment.course, course)
                 .where(
                         eqCategory(courseSearchDto.getCategory()),
-                        titleLike(courseSearchDto.getSearch())
+                        titleLike(courseSearchDto.getSearch()),
+                        enrolledBy(memberId)
                 )
                 .orderBy(getSort(courseSearchDto.getSort()))
                 .fetchOne();
+    }
+
+    private BooleanExpression enrolledBy(Long memberId) {
+        return member.id.eq(memberId);
     }
 
     private BooleanExpression lecturedBy(Long lecturerId) {
