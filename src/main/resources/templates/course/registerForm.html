@@ -18,12 +18,13 @@
         <div class="row">
             <div class="col">
                 <h3>커버 이미지</h3>
-                <div id="coverOuterDiv" style="width: 200px; height: 150px; border: 1px solid; display: flex;
+                <div id="coverOuterDiv" style="width: 215px; height: 145px; display: flex;
                             align-items: center;">
-                    <img id="coverImage" src="/" style="width:100%; height:100%; display:none;">
+                    <img id="coverImage" src="/" style="width:210px; height:140px; display:none;">
                     <div id = "coverInnerDiv" style="width:100%; text-align: center;">
                         커버 이미지 선택<br>
-                        (4: 3 비율 권장)
+                        미선택 시 기본 이미지<br>
+                        (3 : 2 비율 권장)
                     </div>
                 </div>
                 <input type="hidden" th:field="*{cover}">
@@ -63,7 +64,7 @@
 <script>
 
 document.addEventListener("DOMContentLoaded", function(){
-    if(document.getElementById('cover').value != ''){
+    if(document.getElementById('cover').value != '/image/0/default-cover.PNG'){
         document.getElementById('coverInnerDiv').style.display = 'none'
         document.getElementById('coverImage').src = document.getElementById('cover').value
         document.getElementById('coverImage').style.display = 'block'
@@ -113,7 +114,6 @@ document.addEventListener("DOMContentLoaded", function(){
         ).then((res) => {
             return res.json()
         }).then((json) => {
-            console.log(json.url)
             document.getElementById('cover').value = json.url
             document.getElementById('coverImage').style.display = 'block'
             document.getElementById('coverImage').src = json.url

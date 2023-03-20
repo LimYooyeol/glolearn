@@ -7,7 +7,7 @@
 <body>
 <div class="container">
   <div th:replace="/fragments/nav_lecturer.html::nav"></div>
-  <form th:action="@{/course/{id}(id=${courseUpdateDto.id})}" method="post" th:object="${courseUpdateDto}">
+  <form th:action="@{/course/{id}(id=${courseId})}" method="post" th:object="${courseUpdateDto}">
     <input type="hidden" name="_method" value="PUT">
     <div class="row">
       <div class="col">

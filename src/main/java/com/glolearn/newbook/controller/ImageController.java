@@ -57,7 +57,6 @@ public class ImageController {
 
         File file = new File(base + "/" + UUID.randomUUID() + ".png");
 
-        if(!file.exists()) {file.mkdir();}
         image.transferTo(file);
 
         JSONObject response = new JSONObject();

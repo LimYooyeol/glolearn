@@ -13,9 +13,9 @@
 
         <div class="row">
             <th:block th:if ="${popularCourses}">
-                <div class="card" th:each="course: ${popularCourses}">
+                <div class="card" th:each="course: ${popularCourses}" style="width:211px;">
                     <img class="card-img-top" th:src="${course.cover}" alt="Card image cap"
-                        style="height:50%;">
+                        style="width:210px; height:140px">
                     <div class="card-body">
                         <h5 class="card-title">
                             <a th:text="${course.title}" th:href="'/course/'+${course.courseId}" style="color:black"></a>

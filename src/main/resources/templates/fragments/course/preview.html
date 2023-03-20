@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html
         xmlns:th = "http://www.thymeleaf.org">
-<div th:fragment="preview" class="row" style="width:88%">
+<div th:fragment="preview" class="row" style="margin: auto; width:80%; padding:10px;">
     <th:block th:if ="${courses}">
-        <div class="card" th:each="course: ${courses}">
+        <div class="card" th:each="course: ${courses}" style="width:210px;">
             <img class="card-img-top" th:src="${course.cover}" alt="Card image cap"
-                 style="height:50%;">
+                 style="width:210px; height:140px;">
             <div class="card-body">
                 <h5 class="card-title">
                     <a th:text="${course.title}" th:href="'/course/'+${course.courseId}" style="color:black"></a>
@@ -16,11 +16,11 @@
         </div>
     </th:block>
 </div>
-<div th:fragment="managePreview" class="row" style="width:88%">
+<div th:fragment="managePreview" class="row" style="margin: auto; width:80%; padding:10px;">
     <th:block th:if ="${courses}">
-        <div class="card" th:each="course: ${courses}">
+        <div class="card" th:each="course: ${courses}" style="width:211px;">
             <img class="card-img-top" th:src="${course.cover}" alt="Card image cap"
-                 style="height:50%;">
+                 style="width:210px; height:140px;">
             <div class="card-body">
                 <h5 class="card-title">
                     <a th:text="${course.title}" th:href="'/course/'+${course.courseId} + '/manage'" style="color:black"></a>
