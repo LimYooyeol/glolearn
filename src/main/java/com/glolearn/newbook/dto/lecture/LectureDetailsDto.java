@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class LectureDetailsDto {
+
     private Long lectureId;
 
     private Long courseId;

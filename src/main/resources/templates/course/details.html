@@ -90,6 +90,7 @@
 </div>
 
 <!--결제 용 데이터-->
+<input th:if="${nickname}" type="hidden" id="payNickname" th:value="${nickname}">
 <input type="hidden" id="payCourseId" th:value="${courseDetailsDto.id}">
 <input type="hidden" id="payPrice" th:value = "${courseDetailsDto.price}">
 <input type="hidden" id="payProductName" th:value = "${courseDetailsDto.title}">
@@ -135,6 +136,11 @@
 
 
     function enroll(courseId){
+        if(document.getElementById('payNickname') == null){
+            alert('먼저 로그인 후 이용해주세요.')
+            return;
+        }
+
         if(amount == 0){
             document.getElementById('freeEnrollmentForm').submit()
             return;

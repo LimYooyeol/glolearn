@@ -16,7 +16,10 @@
         <div id="viewer"></div>
     </div>
     <div class="row" style="justify-content:center">
-        <a th:href="@{/course/{courseId}(courseId = ${lectureDetailsDto.courseId})}">목록</a>
+        <a class="btn btn-primary" th:href="@{/course/{courseId}(courseId = ${lectureDetailsDto.courseId})}">강의 목록</a>
+    </div>
+    <div class="row" style="justify-content:center; margin-top:2%;">
+        <a class="btn btn-primary" th:href="@{/lecture/{lectureId}/comments(lectureId = ${lectureDetailsDto.lectureId})}">댓글 목록</a>
     </div>
 </div>
 <input type="hidden" id="contents" th:value="${lectureDetailsDto.contents}">
