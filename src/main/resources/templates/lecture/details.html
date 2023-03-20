@@ -16,7 +16,7 @@
         <div id="viewer"></div>
     </div>
     <div class="row" style="justify-content:center">
-        [&lt;] [목록] [&gt;]
+        <a th:href="@{/course/{courseId}(courseId = ${lectureDetailsDto.courseId})}">목록</a>
     </div>
 </div>
 <input type="hidden" id="contents" th:value="${lectureDetailsDto.contents}">

@@ -147,9 +147,14 @@
 
 
         if(input){
-            var price = prompt('적절한 가격을 설정해주세요.')
+            var price = prompt('적절한 가격을 설정해주세요. \n (원 단위로 숫자만 입력해주세요.)')
+            if(!price){
+                return;
+            }
+
+            if(price == '') { return; }
+
             document.getElementById('coursePrice').value = price
-            alert(document.getElementById('coursePrice').value)
 
             var form = document.getElementById('publishCourseForm')
             form.submit()
