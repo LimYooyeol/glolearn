@@ -196,7 +196,7 @@ public class LectureController {
         if(result.hasErrors()){
             model.addAttribute("nickname", member.getNickname());
             model.addAttribute("lectureId", lectureId);
-            return "/course/lecture/modifyForm";
+            return "/lecture/modifyForm";
         }
 
         //강의 조회
