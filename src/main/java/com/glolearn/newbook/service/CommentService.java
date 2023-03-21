@@ -47,10 +47,11 @@ public class CommentService {
         if(rootId != null){
             root = commentRepository.findById(rootId);
             if(root == null) { throw new IllegalArgumentException("존재하지 않는 원댓글입니다.");}
+            root = root.getRoot();
         }
 
         // 댓글 추가
-        Comment comment = Comment.createComment(member, lecture, root.getRoot(), commentRegisterDto);
+        Comment comment = Comment.createComment(member, lecture, root, commentRegisterDto);
         commentRepository.save(comment);
 
         // 대댓글이 아닌 경우 root 를 자기 자신으로
