@@ -20,6 +20,7 @@ public class LecturePreviewDto {
     private LocalDate lastUpdateDate;
 
     public LecturePreviewDto(Lecture l) {
+
         this.courseId = l.getCourse().getId();
         this.lectureId = l.getId();
         this.title = l.getTitle();

@@ -44,4 +44,42 @@ public class LectureRepository {
     public void delete(Lecture lecture){
         em.remove(lecture);
     }
+
+    public Lecture findNext(Long courseId, Long lectureId){
+        List<Lecture> resultList = em.createQuery(
+                        "select l from Lecture l " +
+                                " where l.course.id =:courseId " +
+                                " and l.id >:lectureId " +
+                                " order by l.id"
+                )
+                .setParameter("courseId", courseId)
+                .setParameter("lectureId", lectureId)
+                .setMaxResults(1)
+                .getResultList();
+
+        if(resultList.size() == 0){
+            return null;
+        }
+
+        return resultList.get(0);
+    }
+
+    public Lecture findPrev(Long courseId, Long lectureId){
+        List<Lecture> resultList = em.createQuery(
+                        "select l from Lecture l " +
+                                " where l.course.id =:courseId " +
+                                " and l.id <:lectureId " +
+                                " order by l.id desc"
+                )
+                .setParameter("courseId", courseId)
+                .setParameter("lectureId", lectureId)
+                .setMaxResults(1)
+                .getResultList();
+
+        if(resultList.size() == 0){
+            return null;
+        }
+
+        return resultList.get(0);
+    }
 }

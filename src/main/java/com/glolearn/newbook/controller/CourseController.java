@@ -7,10 +7,7 @@ import com.glolearn.newbook.dto.course.*;
 import com.glolearn.newbook.dto.lecture.LectureDetailsDto;
 import com.glolearn.newbook.dto.lecture.LecturePreviewDto;
 import com.glolearn.newbook.exception.InvalidAccessException;
-import com.glolearn.newbook.service.CourseService;
-import com.glolearn.newbook.service.EnrollmentService;
-import com.glolearn.newbook.service.LectureService;
-import com.glolearn.newbook.service.MemberService;
+import com.glolearn.newbook.service.*;
 import javassist.NotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +30,8 @@ public class CourseController {
     private final MemberService memberService;
     private final LectureService lectureService;
     private final EnrollmentService enrollmentService;
+
+    private final LastLectureHistoryService lastLectureHistoryService;
 
     // 코스 등록 페이지(강사)
     @GetMapping("/course/register")
@@ -368,6 +367,28 @@ public class CourseController {
         model.addAttribute("pagingBase", "/courses/enroll");
 
         return "/course/list";
+    }
+
+    //이어보기
+    @GetMapping("/course/{courseId}/lecture/continue")
+    @Auth
+    public String lastViewedLecture(
+            @PathVariable(name = "courseId") Long courseId
+    ){
+        // 인증
+        Member member = memberService.findMember(UserContext.getCurrentMember());
+        if(member == null) {return "redirect:/login";}
+
+        // 기록 조회
+        Long lastLecture = lastLectureHistoryService.findByMemberIdAndCourseId(member.getId(), courseId);
+
+        // 기록이 없는 경우 - 코스의 첫번째 강의로
+        if(lastLecture == null){
+            Lecture firstLecture = lectureService.findFirstLecture(courseId);
+            return "redirect:/lecture/" + firstLecture.getId();
+        }
+
+        return "redirect:/lecture/" + lastLecture;
     }
 
 

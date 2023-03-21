@@ -6,13 +6,11 @@ import com.glolearn.newbook.domain.Course;
 import com.glolearn.newbook.domain.Lecture;
 import com.glolearn.newbook.domain.Member;
 import com.glolearn.newbook.dto.lecture.LectureDetailsDto;
+import com.glolearn.newbook.dto.lecture.LecturePreviewDto;
 import com.glolearn.newbook.dto.lecture.LectureRegisterDto;
 import com.glolearn.newbook.dto.lecture.LectureUpdateDto;
 import com.glolearn.newbook.exception.InvalidAccessException;
-import com.glolearn.newbook.service.CourseService;
-import com.glolearn.newbook.service.EnrollmentService;
-import com.glolearn.newbook.service.LectureService;
-import com.glolearn.newbook.service.MemberService;
+import com.glolearn.newbook.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,8 +28,8 @@ public class LectureController {
     private final MemberService memberService;
     private final CourseService courseService;
     private final LectureService lectureService;
-
     private final EnrollmentService enrollmentService;
+    private final LastLectureHistoryService lastLectureHistoryService;
 
     // 강의 조회(일반 회원)
     @GetMapping("/lecture/{lectureId}")
@@ -58,8 +57,22 @@ public class LectureController {
             }
         }
 
+        // 시청 기록 추가
+        lastLectureHistoryService.logHistory(member.getId(), courseId, lectureId);
+
+        // 강의 목록 추가
+        Lecture prevLecture = lectureService.findPrevLecture(courseId, lectureId);
+        Lecture nextLecture = lectureService.findNextLecture(courseId, lectureId);
+
+
         model.addAttribute("nickname", member.getNickname());
         model.addAttribute("lectureDetailsDto", lectureDetailsDto);
+        if(prevLecture != null){
+            model.addAttribute("prevLecture", new LecturePreviewDto(prevLecture));
+        }
+        if(nextLecture != null){
+            model.addAttribute("nextLecture", new LecturePreviewDto(nextLecture));
+        }
         return "lecture/details";
     }
 

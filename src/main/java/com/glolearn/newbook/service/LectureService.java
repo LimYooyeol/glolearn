@@ -71,4 +71,13 @@ public class LectureService {
     public Lecture findFirstLecture(Long courseId) {
         return lectureRepository.findFirstLecture(courseId);
     }
+
+    public Lecture findNextLecture(Long courseId, Long lectureId){
+        return lectureRepository.findNext(courseId, lectureId);
+    }
+
+    public Lecture findPrevLecture(Long courseId, Long lectureId){
+        return lectureRepository.findPrev(courseId, lectureId);
+    }
+
 }

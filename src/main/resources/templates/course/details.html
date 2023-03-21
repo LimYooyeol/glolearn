@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html
-        xmlns:th = "http://www.thymeleaf.org">
+        xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:replace = "fragments/header :: header">
 <body>
 <div class="container">
@@ -26,7 +26,10 @@
                 <p th:text="'가격: ' + ${courseDetailsDto.price} + '(원)'"></p>
             </div>
             <div class="row">
-                <button th:if="${enrolled == true}" class="btn btn-success">이어보기</button>
+                <form
+                    th:action = "@{/course/{courseId}/lecture/continue(courseId=${courseDetailsDto.id})}" method="get">
+                    <button th:if="${enrolled == true}" class="btn btn-success">이어보기</button>
+                </form>
                 <button th:if="${enrolled == false}"
                         class="btn btn-success" th:onclick="|enroll('${courseDetailsDto.id}')|">수강하기</button>
                 <form id="freeEnrollmentForm"
