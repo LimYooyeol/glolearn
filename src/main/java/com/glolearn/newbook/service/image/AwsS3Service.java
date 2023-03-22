@@ -1,4 +1,4 @@
-package com.glolearn.newbook.service;
+package com.glolearn.newbook.service.image;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -12,9 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 
-@Service
 @RequiredArgsConstructor
-public class AwsS3Service {
+public class AwsS3Service implements ImageService {
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -30,8 +29,8 @@ public class AwsS3Service {
     private String region;
 
     // 이미지 불러오기
-    public void findImage(String filename, HttpServletResponse response) throws IOException {
-        InputStream inputStream = amazonS3Client.getObject(bucket, filename + ".PNG").getObjectContent();
+    public void findImage(String directory, String filename, HttpServletResponse response) throws IOException {
+        InputStream inputStream = amazonS3Client.getObject(bucket, directory + "/" + filename + ".PNG").getObjectContent();
         IOUtils.copy(inputStream, response.getOutputStream());
         inputStream.close();
     }
@@ -48,6 +47,4 @@ public class AwsS3Service {
 
         return directory + "/" + filename;
     }
-
-
 }
