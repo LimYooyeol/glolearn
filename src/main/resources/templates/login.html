@@ -20,8 +20,8 @@
 <script>
   function loginWithKakao(){
 
-    var ipAddress = 'localhost'
-<!--    var ipAddress = '127.0.0'-->
+<!--    var ipAddress = 'localhost'-->
+    var ipAddress = '13.124.113.195'
 
     Kakao.init('39820925f96876b00bbdc22a850605f9')
 
@@ -30,8 +30,11 @@
     var after = url.searchParams.get('after')
     if(after == null) { after = '/' }
 
+<!--    var ipAddress = 'localhost'-->
+    var ipAddress = '13.124.113.195'
+
     Kakao.Auth.authorize({
-      redirectUri: 'http://localhost:8080/oauth/kakao/token',
+      redirectUri: 'http://' + ipAddress + ':8080/oauth/kakao/token',
       state: after
     })
   }

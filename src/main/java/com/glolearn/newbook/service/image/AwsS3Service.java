@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Service
 @RequiredArgsConstructor
 public class AwsS3Service implements ImageService {
     private final AmazonS3Client amazonS3Client;

@@ -3,10 +3,12 @@ package com.glolearn.newbook.payment;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Component
 public class TossPayments {
@@ -19,15 +21,21 @@ public class TossPayments {
         jsonObject.put("orderId", orderId);
         jsonObject.put("amount", amount);
 
-        String response = WebClient.create("https://api.tosspayments.com")
-                .post()
-                .uri(
-                        uriBuilder -> uriBuilder.path("/v1/payments/confirm").build()
-                )
-                .header("Authorization", "Basic dGVzdF9za196WExrS0V5cE5BcldtbzUwblgzbG1lYXhZRzVSOg==")
-                .header("Content-Type", "application/json")
-                .body(BodyInserters.fromValue(jsonObject.toString()))
-                .retrieve().bodyToMono(String.class).block();
+        String response = null;
+        try{
+            response = WebClient.create("https://api.tosspayments.com")
+                    .post()
+                    .uri(
+                            uriBuilder -> uriBuilder.path("/v1/payments/confirm").build()
+                    )
+                    .header("Authorization", "Basic dGVzdF9za196WExrS0V5cE5BcldtbzUwblgzbG1lYXhZRzVSOg==")
+                    .header("Content-Type", "application/json")
+                    .body(BodyInserters.fromValue(jsonObject.toString()))
+                    .retrieve()
+                    .bodyToMono(String.class).block();
+        }catch (WebClientResponseException e){
+            throw new IllegalStateException("결제 실패");
+        }
 
         JSONParser parser = new JSONParser();
         JSONObject result;

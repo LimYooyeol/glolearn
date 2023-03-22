@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -92,6 +93,7 @@ public class CourseController {
         // 모델 전달
         model.addAttribute("courseDetailsDto", new CourseDetailsDto(course));
         model.addAttribute("lectures", lectures);
+        model.addAttribute("orderId", UUID.randomUUID());
         return "course/details";
     }
 
@@ -311,8 +313,8 @@ public class CourseController {
         }
 
         //유효성 검사
-        if(price < 0){
-            throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
+        if(price < 1000){
+            throw new IllegalArgumentException("가격은 1000원 이상이어야 합니다.");
         }
 
         // 인가

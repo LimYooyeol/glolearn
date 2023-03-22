@@ -72,8 +72,6 @@ public class EnrollmentController {
     public String paymentFailure(
             Model model
     ){
-        System.out.println("여기까지 ㄴ옴");
-
         //인증
         Member member = memberService.findMember(UserContext.getCurrentMember());
         if(member != null) {model.addAttribute("nickname", member.getNickname());}
