@@ -4,6 +4,7 @@ import com.glolearn.newbook.annotation.Auth;
 import com.glolearn.newbook.aspect.auth.UserContext;
 import com.glolearn.newbook.domain.Member;
 import com.glolearn.newbook.exception.InvalidAccessException;
+import com.glolearn.newbook.service.AwsS3Service;
 import com.glolearn.newbook.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -29,38 +30,29 @@ public class ImageController {
 
     private final MemberService memberService;
 
+    private final AwsS3Service awsS3Service;
+
     @GetMapping("/image/{memberId}/{filename}")
     public void getImage(
             @PathVariable(name = "memberId") String memberId,
             @PathVariable(name = "filename") String filename,
             HttpServletResponse response
     ) throws IOException {
-        File image = new File("C:/Users/duf70/OneDrive/바탕 화면/glo_image/" + memberId + "/" + filename);
-
-        FileInputStream fileInputStream = new FileInputStream(image);
-        IOUtils.copy(fileInputStream, response.getOutputStream());
-        fileInputStream.close();
+        awsS3Service.findImage(memberId + "/" + filename, response);
     }
 
     @PostMapping("/image")
     @ResponseBody
     @Auth
-    public String uploadImage(MultipartFile image) throws IOException {
-        if(UserContext.getCurrentMember() == null){
-            throw new InvalidAccessException("Not authenticated");
-        }
+    public String uploadImage(MultipartFile image) throws IOException, InterruptedException {
+        // 인증
         Member member = memberService.findMember(UserContext.getCurrentMember());
         if(member == null){ throw new InvalidAccessException("Non-existing member.");}
 
-        File base = new File("C:/Users/duf70/OneDrive/바탕 화면/glo_image/" + member.getId());
-        if(!base.exists()) {base.mkdir();}
-
-        File file = new File(base + "/" + UUID.randomUUID() + ".png");
-
-        image.transferTo(file);
+        String filename = awsS3Service.saveImage(image, member.getId().toString(), UUID.randomUUID().toString());
 
         JSONObject response = new JSONObject();
-        response.put("url", "/image/" + member.getId() + "/" + file.getName());
+        response.put("url", "/image/" + filename);
 
         return response.toString();
     }

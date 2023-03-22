@@ -24,5 +24,5 @@ public class CourseRegisterDto {
     private Category category;
 
     @NotBlank
-    private String cover = "/image/0/default-cover.PNG";
+    private String cover = "/image/0/default-cover";
 }
