@@ -55,7 +55,7 @@ public class CommentController {
         model.addAttribute("comments", comments);
         model.addAttribute("commentRegisterDto", new CommentRegisterDto());
 
-        return "/comment/list";
+        return "comment/list";
     }
 
     // 댓글 작성

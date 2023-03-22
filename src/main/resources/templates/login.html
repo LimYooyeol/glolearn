@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/css/bootstrap.css">
 </head>
 <body>
-<div th:replace="/fragments/nav.html::nav"></div>
+<div th:replace="fragments/nav.html::nav"></div>
 <br>
 <div style="width:100%; text-align:center;">
   <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg"
@@ -19,6 +19,10 @@
 </script>
 <script>
   function loginWithKakao(){
+
+    var ipAddress = 'localhost'
+<!--    var ipAddress = '127.0.0'-->
+
     Kakao.init('39820925f96876b00bbdc22a850605f9')
 
     const url = new URL(document.location.href)
@@ -30,7 +34,6 @@
       redirectUri: 'http://localhost:8080/oauth/kakao/token',
       state: after
     })
-
   }
 </script>
 <style>

@@ -100,7 +100,7 @@ public class LectureController {
         model.addAttribute("nickname", member.getNickname());
         model.addAttribute("lecture", new LectureDetailsDto(lecture));
 
-        return "/lecture/manage";
+        return "lecture/manage";
     }
 
 
@@ -127,7 +127,7 @@ public class LectureController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("lectureRegisterDto", new LectureRegisterDto());
 
-        return "/lecture/registerForm";
+        return "lecture/registerForm";
     }
 
 
@@ -149,7 +149,7 @@ public class LectureController {
             model.addAttribute("courseId", courseId);
             model.addAttribute("nickname", member.getNickname());
 
-            return "/lecture/registerForm";
+            return "lecture/registerForm";
         }
 
         // 인가
@@ -189,7 +189,7 @@ public class LectureController {
         model.addAttribute("lectureId", lectureId);
         model.addAttribute("lectureUpdateDto", new LectureUpdateDto(lecture));
 
-        return "/lecture/modifyForm";
+        return "lecture/modifyForm";
     }
 
     // 강의 수정

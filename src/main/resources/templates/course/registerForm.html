@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="/fragments/nav_lecturer.html::nav"></div>
+    <div th:replace="fragments/nav_lecturer.html::nav"></div>
     <form action="/course" method="post" th:object="${courseRegisterDto}">
         <div class="row">
             <div class="col">
@@ -61,6 +61,8 @@
 </div>
 </body>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/javascripts/bootstrap.js"></script>
 <script>
 
 document.addEventListener("DOMContentLoaded", function(){

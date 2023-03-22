@@ -6,10 +6,10 @@
 <input id="pagingBase" type="hidden" th:value="${pagingBase}">
 <div class="container">
     <th:block th:if="${lecturer}">
-        <div th:replace="/fragments/nav_lecturer.html::nav"></div>
+        <div th:replace="fragments/nav_lecturer.html::nav"></div>
     </th:block>
     <th:block th:if="${lecturer == null}">
-        <div th:replace="/fragments/nav.html::nav"></div>
+        <div th:replace="fragments/nav.html::nav"></div>
     </th:block>
 
     <div class="row">

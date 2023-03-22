@@ -8,7 +8,6 @@ import com.glolearn.newbook.exception.InvalidAccessException;
 import com.glolearn.newbook.payment.TossPayments;
 import com.glolearn.newbook.service.CourseService;
 import com.glolearn.newbook.service.EnrollmentService;
-import com.glolearn.newbook.service.LectureService;
 import com.glolearn.newbook.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -82,7 +81,7 @@ public class EnrollmentController {
         //모델 전달
         model.addAttribute("errorMessage", "결제에 실패하였습니다. 다시 시도해주세요.");
 
-        return "/error/paymentFailure";
+        return "error/paymentFailure";
     }
 
 

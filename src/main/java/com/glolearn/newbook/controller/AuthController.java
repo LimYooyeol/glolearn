@@ -8,7 +8,6 @@ import com.glolearn.newbook.service.AuthInfoService;
 import com.glolearn.newbook.service.MemberService;
 import com.glolearn.newbook.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;

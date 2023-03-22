@@ -6,7 +6,7 @@
     </head>
 <body>
 <div class="container">
-    <div th:replace="/fragments/nav_lecturer.html::nav"></div>
+    <div th:replace="fragments/nav_lecturer.html::nav"></div>
     <form th:action="@{/lecture/{lectureId}(lectureId = ${lectureId})}"
           th:method="put" th:object="${lectureUpdateDto}">
         <div class="row">
@@ -35,6 +35,8 @@
 </div>
 </body>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/javascripts/bootstrap.js"></script>
 <script>
     const Editor = toastui.Editor
     const editor = new Editor({

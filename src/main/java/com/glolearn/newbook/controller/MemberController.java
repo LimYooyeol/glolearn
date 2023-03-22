@@ -39,7 +39,7 @@ public class MemberController {
         // 모델 전달
         model.addAttribute("nickname", member.getNickname());
         model.addAttribute("memberInfoDto", memberInfoDto);
-        return "/member/myPage";
+        return "member/myPage";
     }
 
     // 닉네임 변경 요청

@@ -4,17 +4,12 @@ import com.glolearn.newbook.annotation.Auth;
 import com.glolearn.newbook.aspect.auth.UserContext;
 import com.glolearn.newbook.domain.*;
 import com.glolearn.newbook.dto.course.*;
-import com.glolearn.newbook.dto.lecture.LectureDetailsDto;
 import com.glolearn.newbook.dto.lecture.LecturePreviewDto;
 import com.glolearn.newbook.exception.InvalidAccessException;
 import com.glolearn.newbook.service.*;
-import javassist.NotFoundException;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +40,7 @@ public class CourseController {
         model.addAttribute("nickname", member.getNickname());
         model.addAttribute("courseRegisterDto", new CourseRegisterDto());
 
-        return "/course/registerForm";
+        return "course/registerForm";
     }
 
     // 코스 등록
@@ -62,7 +57,7 @@ public class CourseController {
         // 유효성 검사
         if(result.hasErrors()){
             model.addAttribute("nickname", member.getNickname());
-            return "/course/registerForm";
+            return "course/registerForm";
         }
 
         // 코스 등록
@@ -97,7 +92,7 @@ public class CourseController {
         // 모델 전달
         model.addAttribute("courseDetailsDto", new CourseDetailsDto(course));
         model.addAttribute("lectures", lectures);
-        return "/course/details";
+        return "course/details";
     }
 
     @GetMapping("/course")
@@ -142,7 +137,7 @@ public class CourseController {
         model.addAttribute("courseSearchDto", courseSearchDto);
         model.addAttribute("pagingBase", "/courses");
         model.addAttribute("courses", courses);
-        return "/course/list";
+        return "course/list";
     }
 
     // 코스 수정(강사)
@@ -160,7 +155,7 @@ public class CourseController {
         //유효성 검사
         if(result.hasErrors()){
             model.addAttribute("nickname", member.getNickname());
-            return "/course/modifyForm";
+            return "course/modifyForm";
         }
 
         // 코스 조회
@@ -229,7 +224,7 @@ public class CourseController {
         model.addAttribute("course", courseDetailsDto);
         model.addAttribute("lectures", lectures);
 
-        return "/course/manage";
+        return "course/manage";
     }
 
     // 강의 중인 코스 목록 조회(강사)
@@ -269,7 +264,7 @@ public class CourseController {
         model.addAttribute("pagingBase", "/courses/mine");
         model.addAttribute("lecturer", true);
 
-        return "/course/list";
+        return "course/list";
     }
 
     // 코스 수정 페이지(강사)
@@ -298,7 +293,7 @@ public class CourseController {
         model.addAttribute("nickname", member.getNickname());
         model.addAttribute("courseUpdateDto", courseUpdateDto);
 
-        return "/course/modifyForm";
+        return "course/modifyForm";
     }
 
     // 코스 출시
@@ -366,7 +361,7 @@ public class CourseController {
         model.addAttribute("courseSearchDto", courseSearchDto);
         model.addAttribute("pagingBase", "/courses/enroll");
 
-        return "/course/list";
+        return "course/list";
     }
 
     //이어보기
