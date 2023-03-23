@@ -18,25 +18,25 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace = "fragments/nav::nav"></div>
+    <div th:replace = "fragments/nav_lecturer::nav"></div>
     <div class="row">
         <div class="col">
             <div class="row">
                 <div class="col">
                     <h3>
-                    <a th:href="@{/course/{courseId}(courseId=${lecture.courseId})}"
-                        th:text="${lecture.courseTitle}"
-                        style="color:black; font-weight:bold;">
-                    </a>
+                        <a th:href="@{/course/{courseId}/manage(courseId=${lecture.courseId})}"
+                           th:text="${lecture.courseTitle}"
+                           style="color:black; font-weight:bold;">
+                        </a>
                     </h3>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <h4>
-                        <a th:href="@{/lecture/{lectureId}(lectureId=${lecture.lectureId})}"
-                            th:text="${lecture.title}"
-                            style="color:black;">
+                        <a th:href="@{/lecture/{lectureId}/manage(lectureId=${lecture.lectureId})}"
+                           th:text="${lecture.title}"
+                           style="color:black;">
                         </a>
                     </h4><br>
                 </div>
@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col">
                     <a
-                            th:href="@{/lecture/{lectureId}(lectureId=${lecture.lectureId})}"
+                            th:href="@{/lecture/{lectureId}/manage(lectureId=${lecture.lectureId})}"
                             class="btn-sm btn-secondary" style="color:white;float:right;">
                         강의로 돌아가기
                     </a>
@@ -56,17 +56,17 @@
     <div class="row">
         <div class="col">
             <div th:each="comment : ${comments}" class="card mb-3"
-                th:style="${comment.isReply} ? 'margin-left:5%;' : 'margin-left:0%;'">
+                 th:style="${comment.isReply} ? 'margin-left:5%;' : 'margin-left:0%;'">
                 <div class="card-body">
                     <h5 th:id="${comment.id} + 'writer'" class="card-title" th:text="${comment.writer}"></h5>
                     <h6 class="card-subtitle mb-2 text-muted" th:text="${comment.regDate}"></h6>
                     <p th:id="${comment.id} + 'contents'"
-                            class="card-text" th:text="${comment.contents}">
+                       class="card-text" th:text="${comment.contents}">
                     </p>
                 </div>
                 <div class="card-footer text-muted d-flex justify-content-end">
                     <button type="button" class="btn btn-link btn-sm me-2"
-                        th:onclick="|reply('${comment.id}')|">Reply</button>
+                            th:onclick="|reply('${comment.id}')|">Reply</button>
                     <button
                             th:onclick="|editCommentView('${comment.id}')|"
                             th:if="${nickname == comment.writer}" type="button" class="btn btn-link btn-sm me-2">Edit</button>
@@ -84,8 +84,8 @@
     <div class="row" style="position:fixed; bottom: 0; width:90%;">
         <div class="col">
             <form id="commentForm"
-                th:action="@{/{lectureId}/comment(lectureId=${lecture.lectureId})}" method="post"
-              th:object="${commentRegisterDto}">
+                  th:action="@{/{lectureId}/comment?lecturer=true(lectureId=${lecture.lectureId})}" method="post"
+                  th:object="${commentRegisterDto}">
                 <div class="card mb-3">
                     <div class="card-body">
                         <p style="color:blue;" id="commentInfo"></p>
@@ -121,6 +121,7 @@
 </div>
 <form id="deleteCommentForm" method="post">
     <input type="hidden" name="_method" value="delete">
+
 </form>
 </body>
 
@@ -161,7 +162,7 @@
 
     function editComment(){
         var form = document.getElementById('editCommentForm')
-        form.action = '/comments/' + document.getElementById('editCommentId').value
+        form.action = '/comments/' + document.getElementById('editCommentId').value + '?lecturer=true'
 
         form.submit()
     }
@@ -170,7 +171,7 @@
         var input = confirm('정말로 삭제하시겠습니가?\n 작성된 답글 또한 모두 삭제됩니다.')
         if(input){
             var form = document.getElementById('deleteCommentForm')
-            form.action = '/comments/' + commentId
+            form.action = '/comments/' + commentId + '?lecturer=true'
             form.submit()
         }
     }

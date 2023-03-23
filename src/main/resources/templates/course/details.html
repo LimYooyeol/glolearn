@@ -92,6 +92,7 @@
     </div>
 </div>
 
+<input type="hidden" id="ipAddress" th:value="${ipAddress}">
 <!--결제 용 데이터-->
 <input th:if="${nickname}" type="hidden" id="payNickname" th:value="${nickname}">
 <input type="hidden" id="payCourseId" th:value="${courseDetailsDto.id}">
@@ -151,8 +152,9 @@
             return;
         }
 
-<!--        var ipAddress = 'localhost'-->
-        var ipAddress = '13.124.113.195'
+        alert('테스트 결제입니다.\n (결제가 실제로 이뤄지지 않지만, 절차를 마쳐야 수강이 가능합니다.)')
+
+        var ipAddress = document.getElementById('ipAddress').value
 
         tossPayments.requestPayment('카드', { // 결제 수단 파라미터
           amount: amount,       // 결제 가격(변조 주의)
@@ -163,4 +165,14 @@
         })
     }
 </script>
+<style>
+    .toastui-editor-contents p{
+        font-size:16px !important;
+    }
+    .toastui-editor-contents img{
+        display:block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
 </html>

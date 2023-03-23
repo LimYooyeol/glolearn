@@ -32,7 +32,9 @@ public class CommentController {
     @GetMapping("/lecture/{lectureId}/comments")
     @Auth
     public String commentList(Model model,
-                              @PathVariable("lectureId") Long lectureId){
+                              @PathVariable("lectureId") Long lectureId,
+                              @RequestParam(defaultValue = "false") Boolean lecturer
+    ){
         // 인증
         Member member = memberService.findMember(UserContext.getCurrentMember());
         if(member == null) {return "redirect:/login";}
@@ -55,6 +57,10 @@ public class CommentController {
         model.addAttribute("comments", comments);
         model.addAttribute("commentRegisterDto", new CommentRegisterDto());
 
+        if(lecturer){
+            return "comment/list-lecturer";
+        }
+
         return "comment/list";
     }
 
@@ -63,6 +69,7 @@ public class CommentController {
     @Auth
     public String addComment(
             @PathVariable("lectureId") Long lectureId,
+            @RequestParam(defaultValue = "false") Boolean lecturer,
             @Valid CommentRegisterDto commentRegisterDto,
             BindingResult result
     ){
@@ -83,17 +90,18 @@ public class CommentController {
 
         // 유효성 검사
         if(result.hasErrors()){
-            return "redirect:/lecture/"+lectureId +"/comments";
+            return "redirect:/lecture/"+lectureId +"/comments" + "?lecturer=" + lecturer;
         }
 
         commentService.addComment(member.getId(), lecture.getId(), commentRegisterDto.getRootId(), commentRegisterDto);
-        return "redirect:/lecture/" + lectureId + "/comments";
+        return "redirect:/lecture/" + lectureId + "/comments" + "?lecturer=" + lecturer;
     }
 
     @DeleteMapping("/comments/{commentId}")
     @Auth
     public String deleteComment(
-            @PathVariable(name = "commentId") Long commentId
+            @PathVariable(name = "commentId") Long commentId,
+            @RequestParam(defaultValue = "false") Boolean lecturer
     ){
         // 인증
         Member member = memberService.findMember(UserContext.getCurrentMember());
@@ -113,7 +121,7 @@ public class CommentController {
         // 댓글 삭제
         commentService.removeComment(commentId);
 
-        return "redirect:/lecture/" + lectureId + "/comments";
+        return "redirect:/lecture/" + lectureId + "/comments" + "?lecturer=" + lecturer;
     }
 
     // 댓글 수정
@@ -121,6 +129,7 @@ public class CommentController {
     @Auth
     public String modifyComment(
             @PathVariable(name = "commentId") Long commentId,
+            @RequestParam(defaultValue = "false") Boolean lecturer,
             @Valid CommentUpdateDto commentUpdateDto,
             BindingResult result
     ){
@@ -147,8 +156,9 @@ public class CommentController {
         // 댓글 수정
         commentService.modifyComment(commentId, commentUpdateDto);
 
-        return "redirect:/lecture/" + lectureId + "/comments";
+        return "redirect:/lecture/" + lectureId + "/comments" + "?lecturer=" + lecturer;
     }
+
 
 
 }

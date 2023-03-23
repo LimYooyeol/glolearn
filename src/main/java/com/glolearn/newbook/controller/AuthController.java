@@ -8,10 +8,12 @@ import com.glolearn.newbook.service.AuthInfoService;
 import com.glolearn.newbook.service.MemberService;
 import com.glolearn.newbook.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,9 +27,15 @@ public class AuthController {
     private final KakaoOauthProvider kakaoOauthProvider;
     private final JwtUtils jwtUtils;
 
+    @Value("${ip-address}")
+    private String ipAddress;
+
     // 로그인 페이지
     @GetMapping("/login")
-    public String login(){
+    public String login(
+            Model model
+    ){
+        model.addAttribute("ipAddress", ipAddress);
         return "login";
     }
 

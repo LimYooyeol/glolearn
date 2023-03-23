@@ -15,6 +15,8 @@ public class CoursePreviewDto {
 
     private String lecturer;
 
+    private Boolean isPublished;
+
     public CoursePreviewDto(){}
     public CoursePreviewDto(Course c) {
         this.courseId = c.getId();
@@ -22,5 +24,6 @@ public class CoursePreviewDto {
         this.title = c.getTitle();
         this.numStudent = c.getNumStudent();
         this.lecturer = c.getLecturer().getNickname();
+        this.isPublished = c.getIsPublished();
     }
 }

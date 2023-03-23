@@ -4,7 +4,8 @@ import java.util.Locale;
 
 public enum Category {
     Development("개발"),
-    AI("AI");
+    AI("AI"),
+    Etc("기타");
 
     private final String value;
 

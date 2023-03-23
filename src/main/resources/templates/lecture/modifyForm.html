@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col">
                 <h3>제목</h3>
-                <input th:field="*{title}" type="text" placeholder="제목을 입력하세요.">
+                <input class="form-control" th:field="*{title}" type="text" placeholder="제목을 입력하세요.">
                 <p th:if="${#fields.hasErrors('title')}" style="color:red;">제목은 2자에서 30자 이내로 입력해주세요.</p>
             </div>
         </div>
@@ -27,6 +27,9 @@
         <div class="row">
             <div class="col">
                 <button class="btn btn-primary" type="submit" onclick="update()" style="float:right;">수정하기</button>
+                <a class="btn btn-secondary" type="submit"
+                   th:href="@{/lecture/{lectureId}/manage(lectureId=${lectureId})}"
+                        style="float:right; padding-right:5px;">취소</a>
             </div>
         </div>
     </form>

@@ -3,7 +3,7 @@
         xmlns:th = "http://www.thymeleaf.org">
 <div th:fragment="preview" class="row" style="margin: auto; width:80%; padding:10px;">
     <th:block th:if ="${courses}">
-        <div class="card" th:each="course: ${courses}" style="width:210px;">
+        <div class="card" th:each="course: ${courses}" style="width:212px;">
             <img class="card-img-top" th:src="${course.cover}" alt="Card image cap"
                  style="width:210px; height:140px;">
             <div class="card-body">
@@ -18,7 +18,7 @@
 </div>
 <div th:fragment="managePreview" class="row" style="margin: auto; width:80%; padding:10px;">
     <th:block th:if ="${courses}">
-        <div class="card" th:each="course: ${courses}" style="width:211px;">
+        <div class="card" th:each="course: ${courses}" style="width:212px;">
             <img class="card-img-top" th:src="${course.cover}" alt="Card image cap"
                  style="width:210px; height:140px;">
             <div class="card-body">
@@ -26,7 +26,8 @@
                     <a th:text="${course.title}" th:href="'/course/'+${course.courseId} + '/manage'" style="color:black"></a>
                 </h5>
                 <p class="card-text" style="font-weight:bold;" th:text="${course.lecturer}"></p>
-                <p class="card-text" th:text="${course.numStudent} + '명이 수강 중'"></p>
+                <p th:if="${!course.isPublished}" class="card-text">출시 전</p>
+                <p th:if="${course.isPublished}"class="card-text" th:text="${course.numStudent} + '명이 수강 중'"></p>
             </div>
         </div>
     </th:block>

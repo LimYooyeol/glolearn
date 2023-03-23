@@ -8,6 +8,7 @@ import com.glolearn.newbook.dto.lecture.LecturePreviewDto;
 import com.glolearn.newbook.exception.InvalidAccessException;
 import com.glolearn.newbook.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,9 @@ public class CourseController {
     private final EnrollmentService enrollmentService;
 
     private final LastLectureHistoryService lastLectureHistoryService;
+
+    @Value("${ip-address}")
+    private String ipAddress;
 
     // 코스 등록 페이지(강사)
     @GetMapping("/course/register")
@@ -83,6 +87,7 @@ public class CourseController {
         }
         List<LecturePreviewDto> lectures = lectureService.findAllByCourseId(course.getId());
 
+        // 등록여부 추가
         if(member == null){
             model.addAttribute("enrolled", false);
         }else{
@@ -91,6 +96,7 @@ public class CourseController {
         }
 
         // 모델 전달
+        model.addAttribute("ipAddress", ipAddress);
         model.addAttribute("courseDetailsDto", new CourseDetailsDto(course));
         model.addAttribute("lectures", lectures);
         model.addAttribute("orderId", UUID.randomUUID());
@@ -313,7 +319,7 @@ public class CourseController {
         }
 
         //유효성 검사
-        if(price < 1000){
+        if(price != 0 && price < 1000){
             throw new IllegalArgumentException("가격은 1000원 이상이어야 합니다.");
         }
 

@@ -38,7 +38,7 @@ public class CourseRepository {
         return em.createQuery("select c from Course c " +
                 " left join fetch c.lecturer " +
                 " where c.isPublished = true " +
-                " order by c.numStudent ")
+                " order by c.numStudent desc")
                 .setFirstResult(start)
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

@@ -6,15 +6,22 @@
 <div class="container">
     <div th:replace = "fragments/nav::nav"></div>
     <div class="row">
-        <h3 th:text="${lectureDetailsDto.courseTitle}">{course-title}</h3>
+        <div class="col">
+            <h3 style="font-weight:bold;" th:text="${lectureDetailsDto.courseTitle}">{course-title}</h3>
+        </div>
     </div>
     <div class="row">
-        <h4 th:text="${lectureDetailsDto.lectureTitle}">{lecture-title}</h4>
+        <div class="col">
+            <h4 th:text="${lectureDetailsDto.lectureTitle}">{lecture-title}</h4>
+        </div>
     </div>
     <hr>
     <div class="row">
-        <div id="viewer"></div>
+        <div class="col">
+            <div id="viewer"></div>
+        </div>
     </div>
+    <hr>
     <div class="row" style="justify-content:center;">
 
         <a th:if="${prevLecture != null}"
@@ -71,6 +78,17 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .toastui-editor-contents p{
+        font-size:16px;
+    }
+
+    .toastui-editor-contents img{
+        display:block;
+        margin-left: auto;
+        margin-right: auto;
+        max-width:80%;
     }
 
 </style>
