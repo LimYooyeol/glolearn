@@ -40,7 +40,7 @@ public class LectureController {
     ){
         // 인증
         Member member = memberService.findMember(UserContext.getCurrentMember());
-        if(member == null) {return "redirect:/login";}
+
 
         // 강의 조회
         Lecture lecture = lectureService.findById(lectureId);
@@ -50,22 +50,30 @@ public class LectureController {
         Long courseId = lecture.getCourse().getId();
 
         // 인가
-        if(enrollmentService.findByMemberIdAndCourseId(member.getId(), lecture.getCourse().getId()) == null){
-            if(lectureService.findFirstLecture(courseId).getId() != lecture.getId() &&
-               lecture.getCourse().getLecturer().getId() != member.getId()){
+        if(lectureService.findFirstLecture(courseId).getId() != lecture.getId()){
+            // 미리보기 강의가 아니라면 로그인
+            if(member == null){
+                return "redirect:/login";
+            }
+            else if( // 로그인은 했지만, 수강 신청을 하지 않고 접속할는 경우
+                    enrollmentService.findByMemberIdAndCourseId(member.getId(), lecture.getCourse().getId()) == null
+            ){
                 throw new InvalidAccessException("수강 신청을 먼저 해야합니다.");
             }
         }
 
+
         // 시청 기록 추가
-        lastLectureHistoryService.logHistory(member.getId(), courseId, lectureId);
+        if(member != null) {
+            lastLectureHistoryService.logHistory(member.getId(), courseId, lectureId);
+        }
 
         // 강의 목록 추가
         Lecture prevLecture = lectureService.findPrevLecture(courseId, lectureId);
         Lecture nextLecture = lectureService.findNextLecture(courseId, lectureId);
 
 
-        model.addAttribute("nickname", member.getNickname());
+        if(member != null) {model.addAttribute("nickname", member.getNickname());}
         model.addAttribute("lectureDetailsDto", lectureDetailsDto);
         if(prevLecture != null){
             model.addAttribute("prevLecture", new LecturePreviewDto(prevLecture));
