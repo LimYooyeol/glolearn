@@ -5,11 +5,15 @@ import com.glolearn.newbook.oauth.exception.InvalidAccessTokenException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 public class KakaoOauthProvider implements OauthProvider {
+
+    @Value("${ip-address}")
+    private String ipAddress;
 
     /*
         #shorts:
@@ -24,8 +28,6 @@ public class KakaoOauthProvider implements OauthProvider {
 
         // REST API
         String accessTokenResponse;
-//        String ipAddress = "localhost";
-        String ipAddress = "13.124.113.195";
 
         try {
             accessTokenResponse = WebClient.create("https://kauth.kakao.com")
