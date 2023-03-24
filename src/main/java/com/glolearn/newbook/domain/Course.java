@@ -1,18 +1,20 @@
 package com.glolearn.newbook.domain;
 
-import com.sun.istack.NotNull;
+import com.glolearn.newbook.dto.course.CourseRegisterDto;
+import com.glolearn.newbook.dto.course.CourseUpdateDto;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
+@ToString
+@DynamicInsert
+@DynamicUpdate
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,44 +23,56 @@ public class Course {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecturer")
-    @NotNull
     private Member lecturer;
 
-    @NotBlank
-    @Size(min = 2, max = 100)
-    private String courseName;
+    private String title;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "introduction_id")
+    private Introduction introduction;
 
     private LocalDateTime regDate;
 
-    private String introduction;
-
-    private Boolean published;      // [0: false, 1: true]
+    private Boolean isPublished;
 
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @NotNull
     private String cover;
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private List<Enrollment> enrollments = new ArrayList<>();
+    private Long numStudent;
 
-    // mappedBy 에 들어가는 값은 실제 Lecture class 의 변수 이름
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private List<Lecture> lectures = new ArrayList<>();
+    private Long price;
 
-    public static Course createCourse(Member lecturer, String courseName, String introduction,
-                               Boolean published, Category category, String cover){
+    protected Course(){}
+
+    public static Course createCourse(Member lecturer, CourseRegisterDto courseRegisterDto){
         Course course = new Course();
+
         course.lecturer = lecturer;
-        course.courseName = courseName;
-        course.regDate = LocalDateTime.now();
-        course.published = published;
-        course.introduction = introduction;
-        course.category = category;
-        course.cover = cover;
+        course.title = courseRegisterDto.getTitle();
+        course.introduction = new Introduction(courseRegisterDto.getIntroduction());
+        course.isPublished = courseRegisterDto.getIsPublished();
+        course.category = courseRegisterDto.getCategory();
+        course.cover = courseRegisterDto.getCover();
 
         return course;
+    }
+
+    public void update(CourseUpdateDto courseUpdateDto){
+        this.title = courseUpdateDto.getTitle();
+        this.introduction.updateIntroduction(courseUpdateDto.getIntroduction());
+        this.category = courseUpdateDto.getCategory();
+        this.cover = courseUpdateDto.getCover();
+    }
+
+    public void publish(Long price){
+        this.isPublished = true;
+        this.price = price;
+    }
+
+    public void addStudent(){
+        this.numStudent ++;
     }
 
 }

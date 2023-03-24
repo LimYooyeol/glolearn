@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html
+        xmlns:th = "http://www.thymeleaf.org">
+<head th:replace = "fragments/header :: header">
+<body>
+<div class="container">
+    <div th:replace = "fragments/nav::nav"></div>
+    <div class="row">
+        <div class="col">
+            <h3 style="font-weight:bold;" th:text="${lectureDetailsDto.courseTitle}">{course-title}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4 th:text="${lectureDetailsDto.lectureTitle}">{lecture-title}</h4>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col">
+            <div id="viewer"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="row" style="justify-content:center;">
+
+        <a th:if="${prevLecture != null}"
+           th:href="@{/lecture/{lectureId}(lectureId=${prevLecture.lectureId})}"
+           class="btn btn-secondary move-btn sammy-nowrap-2" style="color:white; margin: 5px;">
+            <span class="button-text">이전 강의:</span>
+            <span class="lecture-title" th:text="${prevLecture.title}"></span>
+            <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+        <a class="btn btn-secondary move-btn"
+           style="color:white; margin:5px;"
+           th:href="@{/course/{courseId}(courseId = ${lectureDetailsDto.courseId})}">
+            <span class="button-text">강의 목록</span>
+        </a>
+        <a th:if="${nextLecture != null}"
+           th:href="@{/lecture/{lectureId}(lectureId=${nextLecture.lectureId})}"
+                class="btn btn-secondary move-btn sammy-nowrap-2" style="color:white; margin:5px;">
+            <span class="button-text">다음 강의:</span>
+            <span class="lecture-title text-truncate"
+                th:text="${nextLecture.title}"></span>
+        </a>
+    </div>
+    <div class="row" style="justify-content:center; margin-top:2%;">
+        <a class="btn btn-primary" th:href="@{/lecture/{lectureId}/comments(lectureId = ${lectureDetailsDto.lectureId})}">댓글 목록</a>
+    </div>
+</div>
+<input type="hidden" id="contents" th:value="${lectureDetailsDto.contents}">
+</body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/javascripts/bootstrap.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+    const viewer = toastui.Editor.factory({
+        el: document.getElementById('viewer'),
+        viewer:true,
+        height: '600px',
+        initialValue: document.getElementById('contents').value
+    })
+</script>
+<style>
+    .move-btn{
+         height: 2.3em;
+         width: 20%;
+         overflow:hidden;
+         text-overflow: ellipsis;
+         display: -webkit-box;
+         -webkit-line-clamp: 2;
+         -webkit-box-orient: vertical;
+    }
+    .sammy-nowrap-2 {
+        width: 20%;
+        margin-bottom: .4em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .toastui-editor-contents p{
+        font-size:16px;
+    }
+
+    .toastui-editor-contents img{
+        display:block;
+        margin-left: auto;
+        margin-right: auto;
+        max-width:80%;
+    }
+
+</style>
+</html>

@@ -1,22 +1,10 @@
 package com.glolearn.newbook.domain;
-
-import com.sun.istack.NotNull;
+import com.glolearn.newbook.domain.Auth.OauthDomain;
 import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.springframework.validation.annotation.Validated;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "MEMBERS", uniqueConstraints = {@UniqueConstraint(    // @UniqueConstraint -> ddl-auto: create 인 경우에만 유효
-        columnNames = {"nickname"}
-)})
+@Table(name = "MEMBERS")
 @Getter
 public class Member {
     @Id
@@ -24,31 +12,26 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "oauth_id")
-    @NotNull
-    private String oAuthId;
+    private String oauthId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "oauth_domain")
-    @NotNull
-    private OAuthDomain oAuthDomain;
+    private OauthDomain oauthDomain;
 
-    @NotBlank
-    @Size(min = 2, max = 50)
-    private String nickname;    // unique
+    // UNIQUE
+    private String nickname;
 
-    @OneToMany(mappedBy = "lecturer", fetch = FetchType.LAZY)
-    private List<Course> teaches = new ArrayList<>();
+    protected Member(){}
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Enrollment> enrollments = new ArrayList<>();
-
-    public static Member createMember(String oAuthId, OAuthDomain oAuthDomain, String nickname){
+    public static Member createMember(String oauthId, OauthDomain oauthDomain, String nickname){
         Member member = new Member();
-        member.oAuthId = oAuthId;
-        member.oAuthDomain = oAuthDomain;
+        member.oauthId = oauthId;
+        member.oauthDomain = oauthDomain;
         member.nickname = nickname;
 
         return member;
+    }
+
+    public void updateNickname(String newNickname){
+        this.nickname = newNickname;
     }
 }

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace = "fragments/header :: header">
+<body>
+<div class="container">
+    <div th:replace = "fragments/nav::nav"></div>
+    <div class="row" style="display:flex;">
+        <div class="col-5">
+            <img th:src="${courseDetailsDto.cover}" style = "height:280px; width:420px;">
+        </div>
+        <div class="col-7">
+            <div class="row">
+                <h3 th:text="${courseDetailsDto.title}"></h3>
+            </div>
+            <div class="row">
+                <p style="font-weight:bold;" th:text="'강의자:' + ${courseDetailsDto.lecturer}"></p>
+            </div>
+            <div class="row">
+                <p th:text="${courseDetailsDto.numStudent} + '명이 수강 중'"></p>
+            </div>
+            <div class="row">
+                <p th:text="${courseDetailsDto.regDate} + ' 등록 됨'"></p>
+            </div>
+            <div class="row">
+                <p th:text="'가격: ' + ${courseDetailsDto.price} + '(원)'"></p>
+            </div>
+            <div class="row">
+                <form
+                    th:action = "@{/course/{courseId}/lecture/continue(courseId=${courseDetailsDto.id})}" method="get">
+                    <button th:if="${enrolled == true}" class="btn btn-success">이어보기</button>
+                </form>
+                <button th:if="${enrolled == false}"
+                        class="btn btn-success" th:onclick="|enroll('${courseDetailsDto.id}')|">수강하기</button>
+                <form id="freeEnrollmentForm"
+                        th:action="@{/enrollment/{courseId}/free(courseId=${courseDetailsDto.id})}" method="post">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tab0" onclick="changeTab(0)">소개</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab1" onclick="changeTab(1)">목차</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div id="display0" class="col">
+            <div class="row">
+                <div class="col">
+                    <input id="introduction" th:value="${courseDetailsDto.introduction}" type="hidden"></input>
+                    <div id="viewer"></div>
+                </div>
+            </div>
+        </div>
+        <div id="display1" class="col" style="display:none;">
+            <ul class="list-group">
+                <li class="list-group-item"
+                        th:each="lecture:${lectures}">
+                    <th:block th:if="${enrolled == true}">
+                        <a
+                           th:text="${lecture.title}"
+                           style="color:black"
+                           th:href="@{/lecture/{lectureId}(lectureId=${lecture.lectureId})}">
+                        </a>
+                    </th:block>
+                    <th:block th:if="${enrolled == false}">
+                        <a th:if="${lectureStat.index == 0}"
+                           th:text="${lecture.title}"
+                           style="color:black"
+                           th:href="@{/lecture/{lectureId}(lectureId=${lecture.lectureId})}">
+                        </a>
+                        <a th:if="${lectureStat.index > 0}"
+                           th:text="${lecture.title}"
+                           style="color:black"
+                           th:onclick="alert('수강신청 후 이용할 수 있습니다.')"></a>
+                        <svg th:if="${lectureStat.index > 0}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-lock2" viewBox="0 0 16 16">
+                        <path d="M8 5a1 1 0 0 1 1 1v1H7V6a1 1 0 0 1 1-1zm2 2.076V6a2 2 0 1 0-4 0v1.076c-.54.166-1 .597-1 1.224v2.4c0 .816.781 1.3 1.5 1.3h3c.719 0 1.5-.484 1.5-1.3V8.3c0-.627-.46-1.058-1-1.224z"/>
+                        <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                    </svg>
+                    </th:block>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="ipAddress" th:value="${ipAddress}">
+<!--결제 용 데이터-->
+<input th:if="${nickname}" type="hidden" id="payNickname" th:value="${nickname}">
+<input type="hidden" id="payCourseId" th:value="${courseDetailsDto.id}">
+<input type="hidden" id="payPrice" th:value = "${courseDetailsDto.price}">
+<input type="hidden" id="payProductName" th:value = "${courseDetailsDto.title}">
+<input type="hidden" id="payOrderId" th:value="${orderId}">
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/javascripts/bootstrap.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+    const viewer = toastui.Editor.factory({
+        el: document.getElementById('viewer'),
+        viewer:true,
+        height: '600px',
+        initialValue: document.getElementById('introduction').value
+    })
+
+    function changeTab(option){
+        var showTab = document.getElementById('tab' + option)
+        var hideTab = document.getElementById('tab' + (option + 1)%2)
+
+        showTab.classList.remove('nav-link')
+        showTab.classList.add('nav-link')
+        showTab.classList.add('active')
+
+        hideTab.classList.remove('active')
+
+
+        var display = document.getElementById('display' + option)
+        var hide = document.getElementById('display' + (option + 1)%2)
+
+        hide.style.display = 'none'
+        display.style.display = 'unset'
+    }
+</script>
+<script src="https://js.tosspayments.com/v1/payment"></script>
+<script>
+
+    const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq'
+    const tossPayments = TossPayments(clientKey)
+
+    const amount = parseInt(document.getElementById('payPrice').value)
+    const orderName = document.getElementById('payProductName').value
+    const courseId = document.getElementById('payCourseId').value
+    const orderId = document.getElementById('payOrderId').value
+
+
+    function enroll(courseId){
+        if(document.getElementById('payNickname') == null){
+            alert('먼저 로그인 후 이용해주세요.')
+            return;
+        }
+
+        if(amount == 0){
+            document.getElementById('freeEnrollmentForm').submit()
+            return;
+        }
+
+        alert('테스트 결제입니다.\n (결제가 실제로 이뤄지지 않지만, 절차를 마쳐야 수강이 가능합니다.)')
+
+        var ipAddress = document.getElementById('ipAddress').value
+
+        tossPayments.requestPayment('카드', { // 결제 수단 파라미터
+          amount: amount,       // 결제 가격(변조 주의)
+          orderId: orderId,     // 주문 ID (UUID)
+          orderName: orderName, // 상품명
+          successUrl: 'http://' + ipAddress + ':8080/enrollment/' + courseId,
+          failUrl: 'http://' + ipAddress + ':8080/payment/failure',
+        })
+    }
+</script>
+<style>
+    .toastui-editor-contents p{
+        font-size:16px !important;
+    }
+    .toastui-editor-contents img{
+        display:block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+</html>

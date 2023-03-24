@@ -4,48 +4,50 @@
 <head th:replace = "fragments/header :: header">
 <body>
     <div class="container">
-        <div th:replace="/fragments/nav.html::nav"></div>
+        <div th:replace="fragments/nav.html::nav"></div>
         <div class="row">
-            <h2>인기 강의</h2>
+            <div class="col">
+                <div style="width:100%; padding:1%; background-color:#EFF5FB;">
+                    <h5 style="padding-left:auto; font-weight:bold; width:100%; text-align:center;">
+                        글로런은 강의를 수강하거나 등록할 수 있는 서비스입니다.
+                    </h5>
+                    <p style="font-weight:bold;">
+                        수강하기: <a style="font-weight:normal;" href="/course/1">강의를 수강하는 법</a>
+                    </p>
+                    <p style="font-weight:bold;">
+                        강의하기: <a style="font-weight:normal;" href="/course/2">직접 강의하는 법</a>
+                    </p>
+                    <p style="color:red; font-weight:bold; font-size:0.6em; width:100%; text-align:right;">
+                        ※ 개발용 서비스로, 배포가 중단되거나 모든 활동 내용이 사라질 수 있습니다. ※
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>인기 강의</h2>
+            </div>
         </div>
 
         <div class="row">
-            <th:block th:if ="${recentCourses}">
-                <div th:each="course : {recentCourses}">
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="..." alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
+            <th:block th:if ="${popularCourses}">
+                <div class="card" th:each="course: ${popularCourses}" style="width:212px;">
+                    <img class="card-img-top" th:src="${course.cover}" alt="Card image cap"
+                        style="width:210px; height:140px">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a th:text="${course.title}" th:href="'/course/'+${course.courseId}" style="color:black"></a>
+                        </h5>
+                        <p class="card-text" style="font-weight:bold;" th:text="${course.lecturer}"></p>
+                        <p class="card-text" th:text="${course.numStudent} + '명이 수강 중'"></p>
                     </div>
                 </div>
             </th:block>
-            <div class="card">
-                <img class="card-img-top" src="/image/temp_image.PNG" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        임시 게시물 만들기(1)
-                    </h5>
-                    <p class="card-text" style="font-weight:bold;">홍길동</p>
-                    <p class="card-text">152명이 수강 중</p>
-                </div>
-            </div>
-            <div class="card">
-                <img class="card-img-top" src="/image/temp_image.PNG" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        임시 게시물 넣어놓기(2) - no tf
-                    </h5>
-                    <p class="card-text" style="font-weight: bold;">이상한 개발자 이름 엄청 긴 개발자 이름</p>
-                    <p class="card-text">139명이 수강 중</p>
-                </div>
-            </div>
         </div>
+        <div class="row" style="height:50px;">
 
+        </div>
     </div>
-
 <!--    <a href="/course/register">강의등록</a>-->
 </body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

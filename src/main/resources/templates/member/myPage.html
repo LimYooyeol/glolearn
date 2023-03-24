@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html
+        xmlns:th = "http://www.thymeleaf.org">
+<head th:replace = "fragments/header :: header">
+<body>
+<div class="container">
+    <div th:replace = "fragments/nav::nav"></div>
+    <h3>마이페이지</h3>
+    <hr>
+    <div class="row">
+        <div class="col-4">
+            <p style="font-weight:bold;">회원번호</p>
+        </div>
+        <div class="col-8">
+            <p th:text="${memberInfoDto.id}"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <p style="font-weight:bold;">소셜 서비스 회원번호</p>
+        </div>
+        <div class="col-8">
+            <p th:text="${memberInfoDto.oauthId}"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <p style="font-weight:bold;">연동된 서비스</p>
+        </div>
+        <div class="col-8">
+            <p th:text="${memberInfoDto.oauthDomain}"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <p style="font-weight:bold;">닉네임</p>
+        </div>
+        <div class="col-4">
+            <p id = "nickname" th:text="${memberInfoDto.nickname}"></p>
+        </div>
+        <div class="col-4">
+            <button class="btn btn-sm btn-primary" onclick="changeNickname()">변경하기</button>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <form id="dropForm" action="/member/me" method="post">
+            <input type="hidden" name="_method" value="delete">
+        </form>
+        <button style="float:right;" class="btn-sm btn-danger"
+            onclick="dropMember()">탈퇴하기</button>
+    </div>
+</div>
+</body>
+<script>
+    function changeNickname(){
+        var newNickname = prompt('2자에서 50자 이내의 새로운 닉네임을 입력해주세요.')
+
+        const formData = new FormData()
+        formData.append('newNickname', newNickname)
+
+        fetch('/member/me/nickname', {
+            method: 'PUT',
+            body: formData
+        })
+        .then((res) => res.json())
+        .then((json) => {
+            if(json.changed){
+                document.getElementById('nickname').innerText = newNickname
+            }else{
+                alert(json.reason)
+            }
+        })
+    }
+
+    function dropMember(){
+        var input = confirm('정말 탈퇴하시겠습니까?\n 탈퇴 시 수강 내역, 작성한 글 등 모든 기록은 삭제됩니다.\n' +
+        '*연동 해제는 연동된 소셜 서비스를 통해 직접 해제하셔야합니다!*')
+        if(input){
+            document.getElementById('dropForm').submit()
+        }
+    }
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/javascripts/bootstrap.js"></script>
+</html>

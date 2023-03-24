@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html
+        xmlns:th = "http://www.thymeleaf.org">
+<head th:replace = "fragments/header :: header">
+<body>
+<div class="container">
+  <div th:replace = "fragments/nav_lecturer::nav"></div>
+  <div class="row">
+    <div class="col">
+      <h3 style="font-weight:bold;" th:text="${lecture.courseTitle}">{course-title}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h4 th:text="${lecture.lectureTitle}">{lecture-title}</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button style="float:right; background-color:white; border:none; color:blue;" th:text="삭제"
+              th:onclick ="|deleteLecture(
+                        '/lecture/${lecture.lectureId}'
+                        )|"
+              th:href="@{/lecturer/course/{courseId}/{lectureId}/modify(courseId=${lecture.courseId}, lectureId=${lecture.lectureId})}"></button>
+
+      <a style="float:right;" th:text="수정"
+         th:href="@{/lecture/{lectureId}/modify(lectureId=${lecture.lectureId})}"></a>
+      </li>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col">
+      <div id="viewer"></div>
+    </div>
+  </div>
+  <hr>
+  <div class="row" style="justify-content:center">
+      <a class="btn btn-primary" th:href="@{/course/{courseId}/manage(courseId=${lecture.courseId})}">뒤로가기</a>
+  </div>
+  <div class="row" style="justify-content:center; margin-top:2%;">
+    <a class="btn btn-primary" th:href="@{/lecture/{lectureId}/comments?lecturer=true(lectureId = ${lecture.lectureId})}">댓글 목록</a>
+  </div>
+</div>
+<input type="hidden" id="contents" th:value="${lecture.contents}">
+
+
+<form method="post" id="deleteLectureForm">
+  <input type="hidden" name="_method" value="DELETE">
+</form>
+</body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/javascripts/bootstrap.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+    const viewer = toastui.Editor.factory({
+        el: document.getElementById('viewer'),
+        viewer:true,
+        height: '600px',
+        initialValue: document.getElementById('contents').value
+    })
+
+    function deleteLecture(action){
+        var input = confirm('정말 삭제하시겠습니까?')
+        if(input){
+            var form = document.getElementById('deleteLectureForm')
+            form.action = action
+            form.submit()
+        }
+    }
+</script>
+<style>
+    .toastui-editor-contents p{
+        font-size:16px !important;
+    }
+    .toastui-editor-contents img{
+        display:block !important;
+        margin-left: auto;
+        margin-right: auto;
+        max-width:80%;
+        height:auto;
+    }
+</style>
+</html>

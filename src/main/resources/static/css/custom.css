@@ -21,3 +21,15 @@
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
 }
+
+
+.toastui-editor-contents p{
+    font-size:16px;
+}
+
+.toastui-editor-contents img{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width:80%;
+}

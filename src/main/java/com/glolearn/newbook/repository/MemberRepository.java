@@ -1,8 +1,9 @@
 package com.glolearn.newbook.repository;
 
 import com.glolearn.newbook.domain.Member;
-import com.glolearn.newbook.domain.OAuthDomain;
+import com.glolearn.newbook.domain.Auth.OauthDomain;
 import com.glolearn.newbook.domain.QMember;
+import com.glolearn.newbook.exception.InvalidAccessException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,28 +14,39 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class MemberRepository {
-
     private final EntityManager em;
 
 
-    public void save(Member member) {em.persist(member);}
+    // 회원 추가
+    public void save(Member member) {
+        em.persist(member);
+    }
 
+    // 회원 조회(ID)
     public Member findById(Long id) {
         return em.find(Member.class, id);
     }
 
-    public Member findByOAuthIdAndOAuthDomain(String oAuthId, OAuthDomain oAuthDomain) {
-        JPAQueryFactory query = new JPAQueryFactory(em);
-        QMember qMember = QMember.member;
+    // 회원 조회(OAuth Id && OAuth Domain)
+    public Member findByOauthIdAndOauthDomain(String oauthId, OauthDomain oauthDomain) {
 
-        List<Member> members = query.select(qMember)
-                .where(qMember.oAuthId.eq(oAuthId)
-                        .and(qMember.oAuthDomain.eq(oAuthDomain))
-                ).from(qMember).fetch();
+        String query = "SELECT m FROM Member m " +
+                        " WHERE m.oauthId =:oauthId " +
+                        " AND " +
+                        " m.oauthDomain =: oauthDomain";
 
-        if(members.size() == 0){
-            return null;
-        }
-        return members.get(0);
+        Member findMember = (Member) em.createQuery(query)
+                .setParameter("oauthId", oauthId)
+                .setParameter("oauthDomain", oauthDomain)
+                .getResultList().stream().findFirst().orElse(null);
+
+        return findMember;
+    }
+
+    // 회원 탈퇴
+    public void deleteById(Long id){
+        Member member = em.find(Member.class, id);
+        if(member == null) {throw new IllegalArgumentException("존재하지 않는 회원입니다.");}
+        em.remove(member);
     }
 }

@@ -3,15 +3,26 @@ package com.glolearn.newbook.dto.course;
 import com.glolearn.newbook.domain.Category;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 @Data
 public class CourseRegisterDto {
-    private String cover;
 
-    private String courseName;
+    @NotBlank
+    @Size(min = 2, max = 30)
+    private String title;
 
-    private Boolean published;
-
+    @NotBlank
     private String introduction;
 
+    @NotNull
+    private Boolean isPublished = false;
+
+    @NotNull
     private Category category;
+
+    @NotBlank
+    private String cover = "/image/0/default-cover";
 }
