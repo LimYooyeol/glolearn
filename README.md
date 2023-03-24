@@ -35,6 +35,12 @@
   * 강의 별 묻고 답하기 제공
   
 # DB 설계
-<img src = "https://user-images.githubusercontent.com/71579787/227470551-228c6fc3-c97c-42d3-ba57-e2dc09697468.png" style="width:70%;"></img>
+<img src = "https://user-images.githubusercontent.com/71579787/227470551-228c6fc3-c97c-42d3-ba57-e2dc09697468.png"></img>
+
+# 세부기능 및 API
+![image](https://user-images.githubusercontent.com/71579787/227471055-69b3b07b-550e-448f-a360-fd23b671b825.png)
+![image](https://user-images.githubusercontent.com/71579787/227471154-d100f767-1917-40f0-9a30-f1f72e0996bc.png)
+
+
 
 
