@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    public Member findById(Long memberId){
+        return memberRepository.findById(memberId);
+    }
+
     // 회원 추가
     @Transactional
     public void addMember(Member member){
