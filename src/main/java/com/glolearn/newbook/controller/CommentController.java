@@ -44,11 +44,11 @@ public class CommentController {
         if(lecture == null) {throw new IllegalArgumentException("존재하지 않는 강의입니다.");}
 
         // 인가
-        if(enrollmentService.findByMemberIdAndCourseId(member.getId(), lecture.getCourse().getId()) == null){
-            if(lecture.getCourse().getLecturer().getId() != member.getId()){
-                throw new InvalidAccessException("수강 후 조회할 수 있습니다.");
-            }
-        }
+//        if(enrollmentService.findByMemberIdAndCourseId(member.getId(), lecture.getCourse().getId()) == null){
+//            if(lecture.getCourse().getLecturer().getId() != member.getId()){
+//                throw new InvalidAccessException("수강 후 조회할 수 있습니다.");
+//            }
+//        }
 
         List<CommentDetailsDto> comments = commentService.findAllByLectureId(lecture.getId());
 

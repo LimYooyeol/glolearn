@@ -27,6 +27,13 @@ public class AuthController {
     private final KakaoOauthProvider kakaoOauthProvider;
     private final JwtUtils jwtUtils;
 
+    @Value("${trial-id}")
+    private String trialId;
+    @Value("${trial-pwd}")
+    private String trialPwd;
+    @Value("${trial-member-id}")
+    private Long trialMemberId;
+
     @Value("${ip-address}")
     private String ipAddress;
 
@@ -63,6 +70,29 @@ public class AuthController {
 
             return "redirect:/";
         }
+    }
+
+    @PostMapping("/auth/trial")
+    public String trialLogin(
+            String userId,
+            String pwd,
+            HttpServletResponse response
+    ){
+        // 인증
+        if (!(userId.equals(trialId) && pwd.equals(trialPwd))){
+            return "login-failure";
+        }
+
+        // 회원 조회
+        Member member = memberService.findById(trialMemberId);
+
+        String userAccessToken = jwtUtils.createAccessToken(member.getId());
+        String userRefreshToken = jwtUtils.createRefreshToken();
+        authInfoService.addAuthInfo(userRefreshToken, member.getId());
+
+        // 5. 쿠키 발급
+        jwtUtils.issueAccessTokenAndRefreshToken(response, userAccessToken, userRefreshToken);
+        return "redirect:/";
     }
 
     /*
