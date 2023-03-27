@@ -15,10 +15,10 @@
   * HTML, CSS, JavaScript
   * Thymeleaf
   * Bootstrap 4.4.1
-* 클라우드
- * AWS RDS
- * AWS S3
- * AWS EC2
+* 클라우드:
+  * AWS EC2
+  * AWS RDS
+  * AWS S3
   
 # 주요기능
 * 회원
