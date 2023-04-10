@@ -62,7 +62,6 @@ public class LectureController {
             }
         }
 
-
         // 시청 기록 추가
         if(member != null) {
             lastLectureHistoryService.logHistory(member.getId(), courseId, lectureId);
@@ -82,6 +81,12 @@ public class LectureController {
             model.addAttribute("nextLecture", new LecturePreviewDto(nextLecture));
         }
         return "lecture/details";
+    }
+
+    @ExceptionHandler(InvalidAccessException.class)
+    public String handleInvalidAccessException(InvalidAccessException exception, Model model){
+        model.addAttribute("errMsg", exception.getMessage());
+        return "customErrorPage";
     }
 
     // 강의 단건 조회(강사)
